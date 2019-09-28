@@ -106,3 +106,4 @@ venv.bak/
 # DM3 and png files
 *.dm3
 *.png
+*.xlsx#
