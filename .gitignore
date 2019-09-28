@@ -102,3 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# DM3 and png files
+*.dm3
+*.png
