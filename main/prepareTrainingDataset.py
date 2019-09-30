@@ -6,17 +6,19 @@ import random
 from matplotlib import widgets
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from getch import getch
 
 sys.path.append(os.path.abspath('../lib'))
 import imageProcess
 import imageDraw
 
 inputDir = '../dataset/allImages'
-firstFrame,lastFrame = 1,1762
+outputFile = '../dataset/labelledDataset.dat'
+firstFrame,lastFrame = 1,4537
 zfillVal = 6
 
 #######################################################################
-# 
+# EVENT HANDLING FUNCTIONS FOR UPDATING DATABSE AND ASSIGNING LABELS
 #######################################################################
 def updateCounts(val):
     global nopillarCounter,notcollapseCounter,collapseCounter,counter,gImg,outFile
@@ -61,10 +63,12 @@ def quitProgram(val):
     outFile.close()
 #######################################################################
 
-try:
-    outFile = open('../dataset/training/labelledData.dat','r+')
-except:
-    outFile = open('../dataset/training/labelledData.dat','w')
+
+#######################################################################
+# MAIN FUNCTION FOR DISPLAYING IMAGE AND RADIO BUTTONS FOR CLASSIFICATION
+#######################################################################
+print("User training for all the cropped images.")
+outFile = open(outputFile,'a')
 collapseCounter,notcollapseCounter,nopillarCounter = 0,0,0
 frameList = list(range(firstFrame,lastFrame+1)); random.shuffle(frameList)
 counter = 0
@@ -90,3 +94,29 @@ plt.show()
 imgData = submit.on_clicked(updateCounts)
 skip.on_clicked(loadNewImage)
 exitSoftware.on_clicked(quitProgram)
+#######################################################################
+
+
+#######################################################################
+# REMOVE DUPLICATES IN THE LABELLED DATASET
+#######################################################################
+# print("Removing duplicated from the labelled dataset.")
+# labelledDataset = numpy.loadtxt(outputFile,skiprows=0,dtype='int32')
+# [row,col] = labelledDataset.shape
+# outFile = open(outputFile,'w')
+# outFile.write('Label(Collapse=0, Not collapse=1, No pillar=3)\tImage array\n')
+# for r1 in tqdm(range(row)):
+    # flag = 0
+    # data1 = labelledDataset[r1,:]
+    # for r2 in range(r1+1,row):
+        # data2 = labelledDataset[r2,:]
+        # difference = data1-data2
+        # if (numpy.min(difference)==0 and numpy.max(difference)==0):
+            # flag = 1
+            # break
+    # if (flag==0):
+        # for i in data1:
+            # outFile.write('%d\t' %(i))
+        # outFile.write('\n')
+# outFile.close()
+#######################################################################
