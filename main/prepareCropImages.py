@@ -35,7 +35,7 @@ for line in inputInfo.values:
     colBottomLeft = line[6]
     numPillarsInRow = line[7]
     numPillarsInCol = line[8]
-    cropSize = line[9]
+    cropSize = int(round(max(2.0*0.75*(colTopRight-colTopLeft)/(numPillarsInRow-1),2.0*0.75*(rowBottomLeft-rowTopLeft)/(numPillarsInCol-1))))
     
     rowBottomRight = rowBottomLeft-(rowTopLeft-rowTopRight)
     colBottomRight = colBottomLeft-(colTopLeft-colTopRight)
