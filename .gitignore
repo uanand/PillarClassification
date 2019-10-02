@@ -108,5 +108,7 @@ venv.bak/
 *.xlsx#
 *.odp
 datasetForTraining/
+dataset/labelledDataset_firstTraining.dat
+model/
 
 
