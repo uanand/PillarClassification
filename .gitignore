@@ -110,5 +110,4 @@ venv.bak/
 datasetForTraining/
 dataset/labelledDataset_firstTraining.dat
 model/
-
-
+dataset/

@@ -57,144 +57,240 @@ num_trainData,num_testData = x_train.shape[0],x_test.shape[0]
 # ############################################################
 # # TRAINING USING MODEL 1
 # ############################################################
-# batch_size = 1000
-# epochs = 50
-# model = Sequential()
-# model.add(Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=(row,col,1)))
-# model.add(Conv2D(64, kernel_size=(5, 5), activation='relu', input_shape=(row,col,1)))
-# model.add(MaxPooling2D(pool_size=(2, 2)))
-# model.add(Dropout(0.25))
-# model.add(Flatten())
-# model.add(Dense(128, activation='relu'))
-# model.add(Dropout(0.5))
-# model.add(Dense(num_classes, activation='softmax'))
-# model.compile(loss='categorical_crossentropy', optimizer=SGD(0.01), metrics=['accuracy'])
-# print(model.summary())
+batch_size = 1000
+epochs = 50
+model = Sequential()
+model.add(Conv2D(32, kernel_size=(5, 5), activation='relu', input_shape=(row,col,1)))
+model.add(Conv2D(64, kernel_size=(5, 5), activation='relu', input_shape=(row,col,1)))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes, activation='softmax'))
+model.compile(loss='categorical_crossentropy', optimizer=SGD(0.01), metrics=['accuracy'])
+print(model.summary())
 
-# history = model.fit(x_train, y_train,
-          # batch_size=batch_size,
-          # epochs=epochs,
-          # verbose=1,
-          # validation_data=(x_test,y_test))
+history = model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          verbose=1,
+          validation_data=(x_test,y_test))
 
-# score = model.evaluate(x_test, y_test, verbose=0)
-# print('Test loss:', score[0])
-# print('Test accuracy:', score[1])
-# model.save('../model/model1_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.h5')
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+modelName = '../model/model1_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.h5'
+plotName = '../model/model1_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.png'
+model.save(modelName)
 ############################################################
 
 
 ############################################################
 # TRAINING USING MODEL 2
 ############################################################
-# batch_size = 1000
-# epochs = 200
-# model = Sequential()
-# model.add(Conv2D(32, (3,3), padding='same', input_shape=(row,col,1)))
-# model.add(Activation('relu'))
-# model.add(Conv2D(32, (3,3)))
-# model.add(Activation('relu'))
-# model.add(MaxPooling2D(pool_size=(2,2)))
-# model.add(Dropout(0.25))
+batch_size = 1000
+epochs = 200
+model = Sequential()
+model.add(Conv2D(32, (3,3), padding='same', input_shape=(row,col,1)))
+model.add(Activation('relu'))
+model.add(Conv2D(32, (3,3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
 
-# model.add(Conv2D(64, (3,3), padding='same'))
-# model.add(Activation('relu'))
-# model.add(Conv2D(64, (3,3)))
-# model.add(Activation('relu'))
-# model.add(MaxPooling2D(pool_size=(2,2)))
-# model.add(Dropout(0.25))
+model.add(Conv2D(64, (3,3), padding='same'))
+model.add(Activation('relu'))
+model.add(Conv2D(64, (3,3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
 
-# model.add(Flatten())
-# model.add(Dense(512))
-# model.add(Activation('relu'))
-# model.add(Dropout(0.5))
-# model.add(Dense(num_classes))
-# model.add(Activation('softmax'))
+model.add(Flatten())
+model.add(Dense(512))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
 
-# # initiate RMSprop optimizer and configure some parameters
-# opt = keras.optimizers.rmsprop(lr=0.001, decay=1e-6)
+opt = keras.optimizers.rmsprop(lr=0.001, decay=1e-6)
+model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+print(model.summary())
 
-# # Let's create our model
-# # model.compile(loss='categorical_crossentropy', optimizer=SGD(0.01), metrics=['accuracy'])
-# model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
-# print(model.summary())
-
-# history = model.fit(x_train, y_train,
-          # batch_size=batch_size,
-          # epochs=epochs,
-          # validation_data=(x_test, y_test))
-# scores = model.evaluate(x_test, y_test, verbose=1)
-# print('Test loss:', scores[0])
-# print('Test accuracy:', scores[1])
-# model.save('../model/model2_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.h5')
+history = model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test),
+          shuffle=True)
+scores = model.evaluate(x_test, y_test, verbose=1)
+print('Test loss:', scores[0])
+print('Test accuracy:', scores[1])
+modelName = '../model/model2_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.h5'
+plotName = '../model/model2_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.png'
+model.save(modelName)
 ############################################################
+
+
+############################################################
+# TRAINING USING MODEL 3
+############################################################
+batch_size = 1000
+epochs = 500
+model = Sequential()
+model.add(Conv2D(32, (3,3), padding='same', input_shape=(row,col,1)))
+model.add(Activation('relu'))
+model.add(Conv2D(32, (3,3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(64, (3,3), padding='same'))
+model.add(Activation('relu'))
+model.add(Conv2D(64, (3,3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Flatten())
+model.add(Dense(512))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
+
+model.compile(loss='categorical_crossentropy', optimizer=SGD(0.1), metrics=['accuracy'])
+print(model.summary())
+
+history = model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test),
+          shuffle=True)
+scores = model.evaluate(x_test, y_test, verbose=1)
+print('Test loss:', scores[0])
+print('Test accuracy:', scores[1])
+model.save('../model/model3_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.h5')
+############################################################
+
+
+############################################################
+# TRAINING USING MODEL 3
+############################################################
+batch_size = 1000
+epochs = 500
+model = Sequential()
+model.add(Conv2D(32, (3,3), padding='same', input_shape=(row,col,1)))
+model.add(Activation('relu'))
+model.add(Conv2D(32, (3,3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(64, (3,3), padding='same'))
+model.add(Activation('relu'))
+model.add(Conv2D(64, (3,3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(64, (3,3), padding='same'))
+model.add(Activation('relu'))
+model.add(Conv2D(64, (3,3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Flatten())
+model.add(Dense(512))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
+
+model.compile(loss='categorical_crossentropy', optimizer=SGD(1), metrics=['accuracy'])
+print(model.summary())
+
+history = model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test),
+          shuffle=True)
+scores = model.evaluate(x_test, y_test, verbose=1)
+print('Test loss:', scores[0])
+print('Test accuracy:', scores[1])
+modelName = '../model/model4_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.h5'
+plotName = '../model/model4_batchsize_'+str(batch_size)+'_epochs_'+str(epochs)+'.png'
+model.save(modelName)
+############################################################
+
 
 ############################################################
 # PLOTTING THE RESULT
 ############################################################
-# history_dict = history.history
-# loss_values = history_dict['loss']
-# val_loss_values = history_dict['val_loss']
-# acc_values = history_dict['accuracy']
-# val_acc_values = history_dict['val_accuracy']
-# epochs = range(1,len(loss_values)+1)
+history_dict = history.history
+loss_values = history_dict['loss']
+val_loss_values = history_dict['val_loss']
+acc_values = history_dict['accuracy']
+val_acc_values = history_dict['val_accuracy']
+epochs = range(1,len(loss_values)+1)
 
-# fig = plt.figure(figsize=(12,5))
-# ax1 = fig.add_subplot(1,2,1)
-# ax2 = fig.add_subplot(1,2,2)
-# ax1.plot(epochs,loss_values,label='Training loss')
-# ax1.plot(epochs,val_loss_values,label='Validation loss')
-# ax1.set_xlabel('Epochs')
-# ax1.set_ylabel('Loss')
-# ax1.legend()
-# ax2.plot(epochs,acc_values,label='Training accuracy')
-# ax2.plot(epochs,val_acc_values,label='Validation accuracy')
-# ax2.set_xlabel('Epochs')
-# ax2.set_ylabel('Accuracy')
-# ax2.legend()
-# plt.savefig('../model/model1_batchsize_'+str(batch_size)+'_epochs_'+str(epochs[-1])+'.png',format='png')
-# plt.close()
+fig = plt.figure(figsize=(12,5))
+ax1 = fig.add_subplot(1,2,1)
+ax2 = fig.add_subplot(1,2,2)
+ax1.plot(epochs,loss_values,label='Training loss')
+ax1.plot(epochs,val_loss_values,label='Validation loss')
+ax1.set_xlabel('Epochs')
+ax1.set_ylabel('Loss')
+ax1.legend()
+ax2.plot(epochs,acc_values,label='Training accuracy')
+ax2.plot(epochs,val_acc_values,label='Validation accuracy')
+ax2.set_xlabel('Epochs')
+ax2.set_ylabel('Accuracy')
+ax2.legend()
+plt.savefig(plotName,format='png')
+plt.close()
 ############################################################
 
 ############################################################
 # RUN THE MODEL ON TRAIN AND TEST DATASETS
 ############################################################
-model = load_model('../model/model2_batchsize_1000_epochs_200.h5')
-counter = 1
-for i in range(num_trainData/4):
-    gImg = x_train[i,:,:,:]
-    gImg = numpy.reshape(gImg,(1,32,32,1))
-    gImgRaw = (numpy.reshape(gImg,(32,32))*255).astype('uint8')
+# model = load_model('../model/model2_batchsize_1000_epochs_200.h5')
+# counter = 1
+# for i in range(num_trainData/4):
+    # gImg = x_train[i,:,:,:]
+    # gImg = numpy.reshape(gImg,(1,32,32,1))
+    # gImgRaw = (numpy.reshape(gImg,(32,32))*255).astype('uint8')
     
-    if (y_train[i,0]==1):
-        assignedLabel = 'Collapse'
-    else:
-        assignedLabel = 'Not collapse'
-    res = model.predict_classes(gImg,batch_size=1)[0]
-    if (res==0):
-        predictLabel = 'Collapse'
-    elif (res==1):
-        predictLabel = 'Not collapse'
-    if (assignedLabel!=predictLabel):
-        print('trainData',counter,i,assignedLabel,predictLabel)
-        counter+=1
-        cv2.imwrite('/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/train/'+str(i).zfill(6)+'.png',gImgRaw)
+    # if (y_train[i,0]==1):
+        # assignedLabel = 'Collapse'
+    # else:
+        # assignedLabel = 'Not collapse'
+    # res = model.predict_classes(gImg,batch_size=1)[0]
+    # if (res==0):
+        # predictLabel = 'Collapse'
+    # elif (res==1):
+        # predictLabel = 'Not collapse'
+    # if (assignedLabel!=predictLabel):
+        # print('trainData',counter,i,assignedLabel,predictLabel)
+        # counter+=1
+        # cv2.imwrite('/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/train/'+str(i).zfill(6)+'.png',gImgRaw)
     
-counter = 1
-for i in range(num_testData/4):
-    gImg = x_test[i,:,:,:]
-    gImg = numpy.reshape(gImg,(1,32,32,1))
-    gImgRaw = (numpy.reshape(gImg,(32,32))*255).astype('uint8')
-    if (y_test[i,0]==1):
-        assignedLabel = 'Collapse'
-    else:
-        assignedLabel = 'Not collapse'
-    res = model.predict_classes(gImg,batch_size=1)[0]
-    if (res==0):
-        predictLabel = 'Collapse'
-    elif (res==1):
-        predictLabel = 'Not collapse'
-    if (assignedLabel!=predictLabel):
-        print('testData',counter,i,assignedLabel,predictLabel)
-        counter+=1
-        cv2.imwrite('/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/test/'+str(i).zfill(6)+'.png',gImgRaw)
+# counter = 1
+# for i in range(num_testData/4):
+    # gImg = x_test[i,:,:,:]
+    # gImg = numpy.reshape(gImg,(1,32,32,1))
+    # gImgRaw = (numpy.reshape(gImg,(32,32))*255).astype('uint8')
+    # if (y_test[i,0]==1):
+        # assignedLabel = 'Collapse'
+    # else:
+        # assignedLabel = 'Not collapse'
+    # res = model.predict_classes(gImg,batch_size=1)[0]
+    # if (res==0):
+        # predictLabel = 'Collapse'
+    # elif (res==1):
+        # predictLabel = 'Not collapse'
+    # if (assignedLabel!=predictLabel):
+        # print('testData',counter,i,assignedLabel,predictLabel)
+        # counter+=1
+        # cv2.imwrite('/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/test/'+str(i).zfill(6)+'.png',gImgRaw)
+############################################################
