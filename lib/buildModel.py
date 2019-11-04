@@ -1,7 +1,7 @@
 from tensorflow import keras
 from tensorflow.keras import layers,optimizers
-
 import plot
+import utils
 
 def model_06(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
     optimizer = optimizers.RMSprop(learning_rate=0.001,decay=1e-6)
@@ -30,7 +30,8 @@ def model_06(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     model.add(layers.Activation('softmax'))
     
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_best.h5',monitor='val_accuracy',verbose=0,save_best_only=True,mode='max')]
+    filepath='../model/'+name+'_intermediate_{epoch:03d}.h5'
+    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',period=1)]
     print(model.summary())
     
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
@@ -39,8 +40,7 @@ def model_06(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
     
-    bestModel = keras.models.load_model('../model/'+name+'_intermediate_best.h5')
-    scoresTrain = bestModel.evaluate(xTrain,yTrainInd,verbose=0)
-    scoresTest = bestModel.evaluate(xTest,yTestInd,verbose=0)
-    print ("BEST MODEL STATISTICS\nTrain loss: %f, Train accuracy: %f\nTest loss: %f, Test accuracy: %f" %(scoresTrain[0],scoresTrain[1],scoresTest[0],scoresTest[1]))
-    
+    modelFileList = []
+    for epoch in range(1,epochs+1):
+        modelFileList.append('../model/'+name+'_intermediate_'+str(epoch).zfill(3)+'.h5')
+    bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
