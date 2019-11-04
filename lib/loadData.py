@@ -20,6 +20,15 @@ def loadPillarData(fileName,numClasses):
     labelledDataset = numpy.loadtxt(fileName,skiprows=1)
     [numLabelledDataset,temp] = labelledDataset.shape
     
+    xOriginal,yOriginal = labelledDataset[:,1:],labelledDataset[:,0]
+    xRot090,yRot090 = transform.rotateDataset(xOriginal,yOriginal,90)
+    xRot180,yRot180 = transform.rotateDataset(xOriginal,yOriginal,180)
+    xRot270,yRot270 = transform.rotateDataset(xOriginal,yOriginal,270)
+    xFlipHorizontal,yFlipHorizontal = transform.flipDataset()
+    xFlipVertical,yFlipVertical = transform.flipDataset()
+    
+    
+    
     x_train_original,y_train_original = labelledDataset[:4000,1:],labelledDataset[:4000,0]
     x_test_original,y_test_original = labelledDataset[4000:,1:],labelledDataset[4000:,0]
     x_train_rot90,y_train_rot90 = transform.rotateDataset(x_train_original,y_train_original,90)
