@@ -21,6 +21,8 @@ import buildModel
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
 xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2)
+# Shape of training set - 48999, 32, 32, 1
+# Shape of test set - 5445, 32, 32, 1
 ############################################################
 
 # # ############################################################
@@ -278,7 +280,7 @@ xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName=
 ############################################################
 # TRAINING USING MODEL 6
 ############################################################
-buildModel.model_06(name='model_06',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=1000)
+# buildModel.model_06(name='model_06',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=1000)
 ############################################################
 
 
