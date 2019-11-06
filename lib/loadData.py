@@ -16,47 +16,70 @@ def y2indicator(y,numClasses):
 ############################################################
 # LOAD THE LABELLED PILLAR DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-def loadPillarData(fileName,numClasses):
+def loadPillarData(fileName,numClasses,rotFlag=True,flipFlag=True):
     labelledDataset = numpy.loadtxt(fileName,skiprows=1)
     [numLabelledDataset,temp] = labelledDataset.shape
     
     xOriginal,yOriginal = labelledDataset[:,1:],labelledDataset[:,0]
-    xRot090,yRot090 = transform.rotateDataset(xOriginal,yOriginal,90)
-    xRot180,yRot180 = transform.rotateDataset(xOriginal,yOriginal,180)
-    xRot270,yRot270 = transform.rotateDataset(xOriginal,yOriginal,270)
-    xFlipHorizontal,yFlipHorizontal = transform.flipDataset()
-    xFlipVertical,yFlipVertical = transform.flipDataset()
+    if (rotFlag==True):
+        xRot090,yRot090 = transform.rotateDataset(xOriginal,yOriginal,90)
+        xRot180,yRot180 = transform.rotateDataset(xOriginal,yOriginal,180)
+        xRot270,yRot270 = transform.rotateDataset(xOriginal,yOriginal,270)
+        xOriginal = numpy.row_stack((xOriginal,xRot090,xRot180,xRot270))
+        yOriginal = numpy.concatenate((yOriginal,yRot090,yRot180,yRot270))
+    if (flipFlag==True):
+        xFlip,yFlip = transform.flipDataset(xOriginal,yOriginal)
+        xOriginal = numpy.row_stack((xOriginal,xFlip))
+        yOriginal = numpy.concatenate((yOriginal,yFlip))
+        
+    [rowDataset,colDataset] = xOriginal.shape
+    xOriginal,yOriginal = shuffle(xOriginal,yOriginal)
+    xTrain,yTrain = xOriginal[:int(0.9*rowDataset),:],yOriginal[:int(0.9*rowDataset)]
+    xTest,yTest = xOriginal[int(0.9*rowDataset):,:],yOriginal[int(0.9*rowDataset):]
+    
+    xTrain = transform.resizeDataset(xTrain,(32,32))
+    xTest = transform.resizeDataset(xTest,(32,32))
+    xTrain = numpy.reshape(xTrain,(xTrain.shape[0],32,32,1))
+    xTest = numpy.reshape(xTest,(xTest.shape[0],32,32,1))
+    xTrain,xTest = xTrain.astype('float32'),xTest.astype('float32')
+    xTrain/=255; xTest/=255
+    yTrain,yTest = yTrain.astype('uint8'),yTest.astype('uint8')
+    
+    yTrainInd = y2indicator(yTrain,numClasses)
+    yTestInd = y2indicator(yTest,numClasses)
+    
+    xTrain,yTrain,yTrainInd = shuffle(xTrain,yTrain,yTrainInd)
+    xTest,yTest,yTestInd = shuffle(xTest,yTest,yTestInd)
     
     
+    # x_train_original,y_train_original = labelledDataset[:4000,1:],labelledDataset[:4000,0]
+    # x_test_original,y_test_original = labelledDataset[4000:,1:],labelledDataset[4000:,0]
+    # x_train_rot90,y_train_rot90 = transform.rotateDataset(x_train_original,y_train_original,90)
+    # x_test_rot90,y_test_rot90 = transform.rotateDataset(x_test_original,y_test_original,90)
+    # x_train_rot180,y_train_rot180 = transform.rotateDataset(x_train_original,y_train_original,180)
+    # x_test_rot180,y_test_rot180 = transform.rotateDataset(x_test_original,y_test_original,180)
+    # x_train_rot270,y_train_rot270 = transform.rotateDataset(x_train_original,y_train_original,270)
+    # x_test_rot270,y_test_rot270 = transform.rotateDataset(x_test_original,y_test_original,270)
     
-    x_train_original,y_train_original = labelledDataset[:4000,1:],labelledDataset[:4000,0]
-    x_test_original,y_test_original = labelledDataset[4000:,1:],labelledDataset[4000:,0]
-    x_train_rot90,y_train_rot90 = transform.rotateDataset(x_train_original,y_train_original,90)
-    x_test_rot90,y_test_rot90 = transform.rotateDataset(x_test_original,y_test_original,90)
-    x_train_rot180,y_train_rot180 = transform.rotateDataset(x_train_original,y_train_original,180)
-    x_test_rot180,y_test_rot180 = transform.rotateDataset(x_test_original,y_test_original,180)
-    x_train_rot270,y_train_rot270 = transform.rotateDataset(x_train_original,y_train_original,270)
-    x_test_rot270,y_test_rot270 = transform.rotateDataset(x_test_original,y_test_original,270)
+    # x_train = numpy.row_stack((x_train_original,x_train_rot90,x_train_rot180,x_train_rot270))
+    # y_train = numpy.concatenate((y_train_original,y_train_rot90,y_train_rot180,y_train_rot270))
+    # x_test = numpy.row_stack((x_test_original,x_test_rot90,x_test_rot180,x_test_rot270))
+    # y_test = numpy.concatenate((y_test_original,y_test_rot90,y_test_rot180,y_test_rot270))
     
-    x_train = numpy.row_stack((x_train_original,x_train_rot90,x_train_rot180,x_train_rot270))
-    y_train = numpy.concatenate((y_train_original,y_train_rot90,y_train_rot180,y_train_rot270))
-    x_test = numpy.row_stack((x_test_original,x_test_rot90,x_test_rot180,x_test_rot270))
-    y_test = numpy.concatenate((y_test_original,y_test_rot90,y_test_rot180,y_test_rot270))
+    # x_train = transform.resizeDataset(x_train,(32,32))
+    # x_test = transform.resizeDataset(x_test,(32,32))
+    # x_train = numpy.reshape(x_train,(x_train.shape[0],32,32,1))
+    # x_test = numpy.reshape(x_test,(x_test.shape[0],32,32,1))
+    # x_train,x_test = x_train.astype('float32'),x_test.astype('float32')
+    # x_train/=255; x_test/=255
+    # y_train,y_test = y_train.astype('uint8'),y_test.astype('uint8')
     
-    x_train = transform.resizeDataset(x_train,(32,32))
-    x_test = transform.resizeDataset(x_test,(32,32))
-    x_train = numpy.reshape(x_train,(x_train.shape[0],32,32,1))
-    x_test = numpy.reshape(x_test,(x_test.shape[0],32,32,1))
-    x_train,x_test = x_train.astype('float32'),x_test.astype('float32')
-    x_train/=255; x_test/=255
-    y_train,y_test = y_train.astype('uint8'),y_test.astype('uint8')
+    # y_train_ind = y2indicator(y_train,numClasses)
+    # y_test_ind = y2indicator(y_test,numClasses)
     
-    y_train_ind = y2indicator(y_train,numClasses)
-    y_test_ind = y2indicator(y_test,numClasses)
-    
-    x_train,y_train,y_train_ind = shuffle(x_train,y_train,y_train_ind)
-    x_test,y_test,y_test_ind = shuffle(x_test,y_test,y_test_ind)
-    return x_train,y_train,y_train_ind,x_test,y_test,y_test_ind
+    # x_train,y_train,y_train_ind = shuffle(x_train,y_train,y_train_ind)
+    # x_test,y_test,y_test_ind = shuffle(x_test,y_test,y_test_ind)
+    return xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd
 ############################################################
 
 
