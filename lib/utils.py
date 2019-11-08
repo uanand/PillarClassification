@@ -10,17 +10,22 @@ def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
         model = keras.models.load_model(modelFile)
         scoresTrain = model.evaluate(xTrain,yTrainInd,verbose=0)
         scoresTest = model.evaluate(xTest,yTestInd,verbose=0)
-        scoreAccuracy = (scoresTrain[1]*nTrain+scoresTest[1]*nTest)/(nTrain+nTest)
-        scoreLoss = (scoresTrain[0]*nTrain+scoresTest[0]*nTest)/(nTrain+nTest)
+        scoreAccuracy = (scoresTrain[1]+scoresTest[1])/2.0
+        scoreLoss = (scoresTrain[0]+scoresTest[0])/2.0
+        # scoreAccuracy = (scoresTrain[1]*nTrain+scoresTest[1]*nTest)/(nTrain+nTest)
+        # scoreLoss = (scoresTrain[0]*nTrain+scoresTest[0]*nTest)/(nTrain+nTest)
         if (scoreAccuracy>bestAccuracyScore):
             bestAccuracyScore = scoreAccuracy
             bestAccuracyModelFile = modelFile
+            print (modelFile,scoresTrain[1],scoresTest[1],scoreAccuracy,bestAccuracyScore)
         if (scoreLoss<bestLossScore):
             bestLossScore = scoreLoss
             bestLossModelFile = modelFile
+            print (modelFile,scoresTrain[0],scoresTest[0],scoreLoss,bestLossScore)
             
     for modelFile in modelFileList:
         if not(modelFile==bestAccuracyModelFile or modelFile==bestLossModelFile):
+            print ('Removing',modelFile)
             os.remove(modelFile)
             
     modelAccuracy = keras.models.load_model(bestAccuracyModelFile)
