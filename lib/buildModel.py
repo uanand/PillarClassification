@@ -21,7 +21,8 @@ import utils
 # DENSE (2), SOFTMAX
 ############################################################
 def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
-    optimizer = optimizers.RMSprop(learning_rate=0.0001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
+    # optimizer = optimizers.RMSprop(learning_rate=0.00001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
+    optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
     
     model = keras.Sequential()
     model.add(layers.Input(shape=(32,32,1)))
@@ -48,6 +49,7 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
+    keras.backend.clear_session()
     
     modelFileList = []
     for epoch in range(1,epochs+1):
@@ -91,6 +93,7 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
+    keras.backend.clear_session()
     
     modelFileList = []
     for epoch in range(1,epochs+1):
@@ -144,6 +147,7 @@ def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
+    keras.backend.clear_session()
     
     modelFileList = []
     for epoch in range(1,epochs+1):
@@ -197,6 +201,7 @@ def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
+    keras.backend.clear_session()
     
     modelFileList = []
     for epoch in range(1,epochs+1):
@@ -250,6 +255,7 @@ def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
+    keras.backend.clear_session()
     
     modelFileList = []
     for epoch in range(1,epochs+1):
