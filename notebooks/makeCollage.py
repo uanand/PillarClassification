@@ -34,3 +34,6 @@ gImg_180 = (rotate(gImg,180)*255).astype('uint8')
 gImg_270 = (rotate(gImg,270)*255).astype('uint8')
 finalImg = numpy.column_stack((gImg,gImg_90,gImg_180,gImg_270))
 cv2.imwrite('image.png',finalImg)
+
+
+# utils.imagesForLabelDataset(fileName='../dataset/labelledDataset.dat',numClasses=2,dirList=['/home/utkarsh/Projects/PillarClassification/dataset/labelledImages/Collapse','/home/utkarsh/Projects/PillarClassification/dataset/labelledImages/Not collapse'])
