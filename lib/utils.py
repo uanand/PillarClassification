@@ -1,11 +1,15 @@
 import os
 import numpy
+import cv2
 from tensorflow import keras
-from tqdm import tqdm 
+from tqdm import tqdm
+import transform
 
+############################################################
+# SELECT THE BEST MODEL BASED ON ACCURACY AND LOSS VALUES
+############################################################
 def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
     bestAccuracyScore,bestLossScore = 0,1e10
-    # minDiffAccuracy,minDiffLoss = 1e10,1e10
     nTrain,nTest = xTrain.shape[0],xTest.shape[0]
     for modelFile in tqdm(modelFileList):
         model = keras.models.load_model(modelFile)
@@ -17,20 +21,13 @@ def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
         # scoreLoss = (scoresTrain[0]*nTrain+scoresTest[0]*nTest)/(nTrain+nTest)
         diffAccuracy,diffLoss = numpy.abs(scoresTrain[1]-scoresTest[1]),numpy.abs(scoresTrain[0]-scoresTest[0])
         if (scoreAccuracy-diffAccuracy>bestAccuracyScore):
-            # if (diffAccuracy<=minDiffAccuracy):
-                bestAccuracyScore = scoreAccuracy-diffAccuracy
-                # bestAccuracyScore = scoreAccuracy
-                bestAccuracyModelFile = modelFile
-                # minDiffAccuracy = diffAccuracy
+            bestAccuracyScore = scoreAccuracy-diffAccuracy
+            bestAccuracyModelFile = modelFile
         if (scoreLoss+diffLoss<bestLossScore):
-            # if (diffLoss<=minDiffLoss):
-                bestLossScore = scoreLoss+diffLoss
-                # bestLossScore = scoreLoss
-                bestLossModelFile = modelFile
-                # minDiffLoss = diffLoss
-        # del model
+            bestLossScore = scoreLoss+diffLoss
+            bestLossModelFile = modelFile
         keras.backend.clear_session()
-            
+        
     for modelFile in modelFileList:
         if not(modelFile==bestAccuracyModelFile or modelFile==bestLossModelFile):
             os.remove(modelFile)
@@ -49,3 +46,26 @@ def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
         os.rename(bestLossModelFile,bestLossModelFile.replace('.h5','_loss_trainAcc_%.2f_testAcc_%.2f.h5' %(scoresTrain[1]*100,scoresTest[1]*100)))
     except:
         pass
+############################################################
+
+
+############################################################
+# GENERATE IMAGES FOR FALSE DETECTION
+############################################################
+def imageFalseClassification():
+    pass
+############################################################
+
+
+############################################################
+# GENERATE IMAGES FOR LABELLED DATASET
+############################################################
+def imagesForLabelDataset(fileName,numClasses,dirList):
+    labelledDataset = numpy.loadtxt(fileName,skiprows=1)
+    [numLabelledDataset,temp] = labelledDataset.shape
+    x,y = labelledDataset[:,1:].astype('uint8'),labelledDataset[:,0].astype('uint8')
+    x = transform.resizeDataset(x,(32,32))
+    for i in tqdm(range(numLabelledDataset)):
+        gImg = numpy.reshape(x[i,:],(32,32))
+        cv2.imwrite(dirList[y[i]]+'/'+str(i+1).zfill(6)+'.png',gImg)
+############################################################
