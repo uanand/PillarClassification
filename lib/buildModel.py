@@ -21,7 +21,6 @@ import utils
 # DENSE (2), SOFTMAX
 ############################################################
 def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
-    # optimizer = optimizers.RMSprop(learning_rate=0.00001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
     optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
     
     model = keras.Sequential()
@@ -62,11 +61,12 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 # TRAINING DATA USING MODEL 2
 # CONV (32,5,5), RELU
 # CONV (64,5,5), RELU, MAXPOOL (2,2), DROPOUT (0.25)
-# DENSE (128), RELU, DROPOUT (0.50)
+# DENSE (256), RELU, DROPOUT (0.25)
+# DENSE (128), RELU, DROPOUT (0.25)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
-    optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
+    optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
     
     model = keras.Sequential()
     model.add(layers.Input(shape=(32,32,1)))
@@ -77,9 +77,12 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     model.add(layers.MaxPooling2D(pool_size=(2,2)))
     model.add(layers.Dropout(0.25))
     model.add(layers.Flatten())
+    model.add(layers.Dense(256))
+    model.add(layers.Activation('relu'))
+    model.add(layers.Dropout(0.25))
     model.add(layers.Dense(128))
     model.add(layers.Activation('relu'))
-    model.add(layers.Dropout(0.5))
+    model.add(layers.Dropout(0.25))
     model.add(layers.Dense(2))
     model.add(layers.Activation('softmax'))
     
@@ -114,7 +117,8 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
-    optimizer = optimizers.RMSprop(learning_rate=0.001, decay=1e-6)
+    # optimizer = optimizers.RMSprop(learning_rate=0.001, decay=1e-6)
+    optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
     
     model = keras.Sequential()
     model.add(layers.Input(shape=(32,32,1)))
