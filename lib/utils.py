@@ -52,8 +52,27 @@ def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
 ############################################################
 # GENERATE IMAGES FOR FALSE DETECTION
 ############################################################
-def imageFalseClassification():
-    pass
+def falseClassificationImage(modelPath,imagePath,X,Y):
+    counter = 0
+    model = keras.models.load_model(modelPath)
+    for i,(x,y) in enumerate(zip(X,Y)):
+        gImg = numpy.reshape(x,(1,32,32,1))
+        gImgRaw = (numpy.reshape(gImg,(32,32))*255).astype('uint8')
+        if (y==0):
+            assignedLabel = 'Collapse'
+        else:
+            assignedLabel = 'Not collapse'
+        res = model.predict_classes(gImg,batch_size=1)[0]
+        keras.backend.clear_session()
+        if (res==0):
+            predictLabel = 'Collapse'
+        elif (res==1):
+            predictLabel = 'Not collapse'
+        if (assignedLabel!=predictLabel):
+            print(i+1,assignedLabel,predictLabel)
+            cv2.imwrite(imagePath+'/'+str(i+1).zfill(6)+'.png',gImgRaw)
+            counter+=1
+    print ("Percentage of incorrect classification = %.2f" %(100.0*counter/X.shape[0]))
 ############################################################
 
 
