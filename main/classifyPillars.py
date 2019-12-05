@@ -1,32 +1,28 @@
 import os
 import sys
+import gc
 import cv2
 import numpy
 import pandas
-import hyperspy.api as hs
-import matplotlib.pyplot as plt
-from tqdm import tqdm
 from tensorflow import keras
 from keras.models import load_model
-from sklearn.utils import shuffle
-plt.style.use('UMM_ISO9001')
 
 sys.path.append(os.path.abspath('../lib'))
 import imageDraw
 import imageProcess
 
 
-####################################################
+############################################################
 # FIND OUT IF THE PILLAR IS COLLAPSED OR NOT COLLAPSED USING ML MODEL
-####################################################
+############################################################
 excelFileName = 'classifyPillars.xlsx'
-sheetNameList = ['Plasma+RestoreByWater','RestoreByWater']
+sheetNameList = ['Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF']
+model = keras.models.load_model('../model/model_01_intermediate_487_accuracy_trainAcc_99.94_testAcc_99.85.h5')
 
 for sheetName in sheetNameList:
     print('Processing %s sheet' %(sheetName))
-    df = pandas.read_excel(excelFileName,sheet_name=sheetName,names=['inputFile','colTopLeft','rowTopLeft','colTopRight','rowTopRight','colBottomRight','rowBottomRight','colBottomLeft','rowBottomLeft','numPillarsInRow','numPillarsInCol'])
+    df = pandas.read_excel(excelFileName,sheet_name=sheetName,names=['inputFile','colTopLeft','rowTopLeft','colTopRight','rowTopRight','colBottomRight','rowBottomRight','colBottomLeft','rowBottomLeft','numPillarsInRow','numPillarsInCol'],inplace=True)
     
-    model = keras.models.load_model('../model/model_01_intermediate_487_accuracy_trainAcc_99.94_testAcc_99.85.h5')
     counter = 0
     outFile = open(sheetName+'.dat','w')
     outFile.write('InputFile\tTag\tPillarID\tCropStartRow\tCropStartCol\tCropEndRow\tCropEndCol\tClassificationClass\tClassificationClassLabel\n')
@@ -75,5 +71,9 @@ for sheetName in sheetNameList:
                         label = 'Not collapse'
                     outFile.write('%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n' %(inputFile,tag,pillarID,cropRowStart,cropColStart,cropRowEnd,cropColEnd,res,label))
         cv2.imwrite(outputFile,gImgNorm)
+    del df,inputFile,colTopLeft,rowTopLeft,colTopRight,rowTopRight,colBottomRight,rowBottomRight,colBottomLeft,rowBottomLeft,numPillarsInRow,numPillarsInCol,cropSize,outputFile,tag,gImg,gImgNorm,row,col,topRowPillarCentre,bottomRowPillarCenter
+    gc.collect()
     outFile.close()
-####################################################
+del excelFileName,sheetNameList,model,sheetName
+gc.collect()
+############################################################
