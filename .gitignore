@@ -112,3 +112,4 @@ datasetForTraining/
 dataset/labelledDataset_firstTraining.dat
 model/
 dataset/
+main/mprofile*
