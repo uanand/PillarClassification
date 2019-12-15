@@ -5,7 +5,7 @@ import cv2
 import numpy
 import pandas
 from tensorflow import keras
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 sys.path.append(os.path.abspath('../lib'))
 import imageDraw
@@ -16,7 +16,8 @@ import imageProcess
 # FIND OUT IF THE PILLAR IS COLLAPSED OR NOT COLLAPSED USING ML MODEL
 ############################################################
 excelFileName = 'classifyPillars.xlsx'
-sheetNameList = ['Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF']
+# sheetNameList = ['Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF','RestoreBy0.30%HF','RestoreBy0.10%HF']
+sheetNameList = ['RestoreBy0.30%HF']
 model = keras.models.load_model('../model/model_01_intermediate_487_accuracy_trainAcc_99.94_testAcc_99.85.h5')
 
 for sheetName in sheetNameList:
