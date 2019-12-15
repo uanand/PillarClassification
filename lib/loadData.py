@@ -16,8 +16,8 @@ def y2indicator(y,numClasses):
 ############################################################
 # LOAD THE LABELLED PILLAR DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-def loadPillarData(fileName,numClasses,rotFlag=True,flipFlag=True):
-    labelledDataset = numpy.loadtxt(fileName,skiprows=1)
+def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False):
+    labelledDataset = numpy.loadtxt(fileName,skiprows=1,dtype='uint8')
     [numLabelledDataset,temp] = labelledDataset.shape
     
     xOriginal,yOriginal = labelledDataset[:,1:],labelledDataset[:,0]
@@ -37,10 +37,14 @@ def loadPillarData(fileName,numClasses,rotFlag=True,flipFlag=True):
     xTrain,yTrain = xOriginal[:int(0.9*rowDataset),:],yOriginal[:int(0.9*rowDataset)]
     xTest,yTest = xOriginal[int(0.9*rowDataset):,:],yOriginal[int(0.9*rowDataset):]
     
-    xTrain = transform.resizeDataset(xTrain,(32,32))
-    xTest = transform.resizeDataset(xTest,(32,32))
-    xTrain = numpy.reshape(xTrain,(xTrain.shape[0],32,32,1))
-    xTest = numpy.reshape(xTest,(xTest.shape[0],32,32,1))
+    xTrain = transform.resizeDataset(xTrain,(row,col))
+    xTest = transform.resizeDataset(xTest,(row,col))
+    xTrain = numpy.reshape(xTrain,(xTrain.shape[0],row,col,1))
+    xTest = numpy.reshape(xTest,(xTest.shape[0],row,col,1))
+    
+    if (RGB==True):
+        xTrain,xTest = transform.convetToRGB(xTrain,xTest)
+        
     xTrain,xTest = xTrain.astype('float32'),xTest.astype('float32')
     xTrain/=255; xTest/=255
     yTrain,yTest = yTrain.astype('uint8'),yTest.astype('uint8')
