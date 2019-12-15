@@ -1,9 +1,6 @@
 import numpy
-import cv2
 import hyperspy.api as hs
 from scipy import ndimage
-from skimage.morphology import disk, white_tophat
-from skimage import measure
 
 import imageProcess
 
@@ -32,4 +29,17 @@ def readDM4(fileName):
     gImg[gImg>highLimit] = highLimit
     gImg = imageProcess.normalize(gImg)
     return gImg
+#######################################################################
+
+#######################################################################
+# REMOVE BINARY WHITE PARTICLES TOUCHING THE BOUNDARY
+#######################################################################
+def removeBoundaryParticles(bImg):
+    [row,col] = bImg.shape
+    labelImg,numLabel = ndimage.label(bImg)
+    boundaryLabels = numpy.unique(numpy.concatenate((numpy.unique(labelImg[:,0]),numpy.unique(labelImg[:,-1]),numpy.unique(labelImg[0,:]),numpy.unique(labelImg[-1,:]))))
+    boundaryLabels = boundaryLabels[boundaryLabels>0]
+    for label in boundaryLabels:
+        labelImg[labelImg==label] = 0
+    return labelImg.astype('bool')
 #######################################################################
