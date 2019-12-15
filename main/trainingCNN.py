@@ -3,7 +3,6 @@ import sys
 from tqdm import tqdm
 import numpy
 import cv2
-from tensorflow import keras
 
 sys.path.append(os.path.abspath('../lib'))
 import loadData
@@ -13,7 +12,9 @@ import utils
 ############################################################
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,rotFlag=True,flipFlag=True)
+# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='/home/utkarsh/Projects/PillarClassification/dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False)
+xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='/home/utkarsh/Projects/PillarClassification/dataset/labelledDataset.dat',numClasses=2,row=64,col=64,rotFlag=True,flipFlag=True,RGB=True)
+print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape)
 # Shape of training set - 48999, 32, 32, 1
 # Shape of test set - 5445, 32, 32, 1
 ############################################################
@@ -22,23 +23,29 @@ xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName=
 ############################################################
 # TRAIN YOUR MODEL. BUILD MODEL IN A SEPARATE FUNCTION FILE
 ############################################################
-# buildModel.model_01(name='model_01',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=500,batchSize=1000)
-# buildModel.model_02(name='model_02',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=1000)
-# buildModel.model_03(name='model_03',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=1000)
-# buildModel.model_04(name='model_04',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=1000)
-# buildModel.model_05(name='model_05',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=1000)
-# buildModel.model_06(name='model_06',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=1000)
+# buildModel.model_01(name='model_01_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=500,batchSize=1000)
+# buildModel.model_02(name='model_02_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=500,batchSize=1000)
+# buildModel.model_03(name='model_03_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=1000)
+# buildModel.model_04(name='model_04_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=200)
+# buildModel.model_05(name='model_05_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=200)
+buildModel.trainUsingVGG16(name='vgg16_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=100,batchSize=200)
 ############################################################
+
+
+############################################################
+# TRAIN INTERMEDIATE MODEL WITH A DIFFERENT LEARNING RATE
+############################################################
+# buildModel.trainIntermediateModel(name='',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=500,batchSize=1000,learningRate=0.001)
 
 
 ############################################################
 # RUN THE MODEL AND ON TEST AND TRAIN DATASET AND GENERATE
 # IMAGES FOR FALSE IDENTIFICATION
 ############################################################
-modelPath = '/home/utkarsh/Projects/PillarClassification/model/model_01_intermediate_487_accuracy_trainAcc_99.94_testAcc_99.85.h5'
-trainImagesPath = '/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/train'
-testImagesPath = '/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/test'
+# modelPath = '/home/utkarsh/Projects/PillarClassification/model/model_01_intermediate_487_accuracy_trainAcc_99.94_testAcc_99.85.h5'
+# trainImagesPath = '/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/train'
+# testImagesPath = '/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/test'
 
-utils.falseClassificationImage(modelPath,trainImagesPath,xTrain,yTrain)
-utils.falseClassificationImage(modelPath,testImagesPath,xTest,yTest)
+# utils.falseClassificationImage(modelPath,trainImagesPath,xTrain,yTrain)
+# utils.falseClassificationImage(modelPath,testImagesPath,xTest,yTest)
 ############################################################
