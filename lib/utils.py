@@ -50,6 +50,86 @@ def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
 
 
 ############################################################
+# SELECT THE BEST MODEL BASED ON ACCURACY AND LOSS VALUES USING
+# THE HISTORY DICTIONARY
+############################################################
+def selectBestModelHistory(modelFileList,history):
+    bestAccuracyScore,bestLossScore = 0,1e10
+    lossTrainList,accuracyTrainList,lossTestList,accuracyTestList = parseHistoryDict(history)
+    for modelFile,lossTrain,accuracyTrain,lossTest,accuracyTest in zip(modelFileList,lossTrainList,accuracyTrainList,lossTestList,accuracyTestList):
+        accuracyScore = (accuracyTrain+accuracyTest)/2.0
+        lossScore = (lossTrain+lossTest)/2.0
+        accuracyDiff,lossDiff = numpy.abs(accuracyTrain-accuracyTest),numpy.abs(lossTrain-lossTest)
+        if (accuracyScore-accuracyDiff>bestAccuracyScore):
+            bestAccuracyScore = accuracyScore-accuracyDiff
+            bestAccuracyModelFile = modelFile
+            bestTrainLoss_acc,bestTrainAccuracy_acc,bestTestLoss_acc,bestTestAccuracy_acc = lossTrain,accuracyTrain,lossTest,accuracyTest
+        if (lossScore+lossDiff<bestLossScore):
+            bestLossScore = lossScore+lossDiff
+            bestLossModelFile = modelFile
+            bestTrainLoss_loss,bestTrainAccuracy_loss,bestTestLoss_loss,bestTestAccuracy_loss = lossTrain,accuracyTrain,lossTest,accuracyTest
+            
+    for modelFile in modelFileList:
+        if not(modelFile==bestAccuracyModelFile or modelFile==bestLossModelFile):
+            os.remove(modelFile)
+            
+    print ("BEST ACCURACY MODEL STATISTICS\nTrain loss: %f, Train accuracy: %f\nTest loss: %f, Test accuracy: %f" %(bestTrainLoss_acc,bestTrainAccuracy_acc,bestTestLoss_acc,bestTestAccuracy_acc))
+    os.rename(bestAccuracyModelFile,bestAccuracyModelFile.replace('.h5','_accuracy_trainAcc_%.2f_testAcc_%.2f.h5' %(bestTrainAccuracy_acc*100,bestTestAccuracy_acc*100)))
+    
+    try:
+        print ("BEST LOSS MODEL STATISTICS\nTrain loss: %f, Train accuracy: %f\nTest loss: %f, Test accuracy: %f" %(bestTrainLoss_loss,bestTrainAccuracy_loss,bestTestLoss_loss,bestTestAccuracy_loss))
+        os.rename(bestLossModelFile,bestLossModelFile.replace('.h5','_loss_trainAcc_%.2f_testAcc_%.2f.h5' %(bestTrainAccuracy_loss*100,bestTestAccuracy_loss*100)))
+    except:
+        pass
+############################################################
+
+
+############################################################
+# CONVERT Y TO AN INDICATOR MATRIX
+############################################################
+def y2indicator(y,numClasses):
+    N = y.size
+    yInd = numpy.zeros([N,numClasses],dtype='float32')
+    for i in range(N):
+        yInd[i,y[i]] = 1
+    return yInd
+############################################################
+
+
+############################################################
+# READ THE HISTORY DICTIONARY SAVED AFTER MODEL RUN
+############################################################
+def parseHistoryDict(inputFile):
+    f = open(inputFile,'r')
+    text = f.read()
+    if ('accuracy' in text):
+        text = text.split("{'loss': [")[1]
+        loss,text = text.split("], 'accuracy': [")[0],text.split("], 'accuracy': [")[1]
+        accuracy,text = text.split("], 'val_loss': [")[0],text.split("], 'val_loss': [")[1]
+        val_loss,text = text.split("], 'val_accuracy': [")[0],text.split("], 'val_accuracy': [")[1]
+        val_accuracy,text = text.split("]}")[0],text.split("]}")[1]
+    else:
+        text = text.split("{'loss': [")[1]
+        loss,text = text.split("], 'acc': [")[0],text.split("], 'acc': [")[1]
+        accuracy,text = text.split("], 'val_loss': [")[0],text.split("], 'val_loss': [")[1]
+        val_loss,text = text.split("], 'val_acc': [")[0],text.split("], 'val_acc': [")[1]
+        val_accuracy,text = text.split("]}")[0],text.split("]}")[1]
+    
+    lossTrain = loss.split(", ")
+    accuracyTrain = accuracy.split(", ")
+    lossTest = val_loss.split(", ")
+    accuracyTest = val_accuracy.split(", ")
+    epochs = range(1,len(loss)+1)
+    
+    lossTrain = numpy.asarray(lossTrain,dtype='double')
+    accuracyTrain = numpy.asarray(accuracyTrain,dtype='double')
+    lossTest = numpy.asarray(lossTest,dtype='double')
+    accuracyTest = numpy.asarray(accuracyTest,dtype='double')
+    return lossTrain,accuracyTrain,lossTest,accuracyTest
+############################################################
+
+
+############################################################
 # GENERATE IMAGES FOR FALSE DETECTION
 ############################################################
 def falseClassificationImage(modelPath,imagePath,X,Y):
