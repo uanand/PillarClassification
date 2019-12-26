@@ -24,9 +24,10 @@ import utils
 ############################################################
 def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
     optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
+    [N,row,col,channel] = xTrain.shape
     
     model = keras.Sequential()
-    model.add(layers.Input(shape=(32,32,1)))
+    model.add(layers.Input(shape=(row,col,channel)))
     model.add(layers.Flatten())
     model.add(layers.Dense(512))
     model.add(layers.Activation('relu'))
@@ -48,6 +49,7 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
     plotFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.png' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
+    historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
@@ -55,7 +57,8 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileList = []
     for epoch in range(1,epochs+1):
         modelFileList.append('../model/'+name+'_intermediate_'+str(epoch).zfill(3)+'.h5')
-    bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
+    utils.selectBestModelHistory(modelFileList,historyFileName)
+    # bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
 ############################################################
 
 
@@ -69,9 +72,10 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 ############################################################
 def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
     optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
+    [N,row,col,channel] = xTrain.shape
     
     model = keras.Sequential()
-    model.add(layers.Input(shape=(32,32,1)))
+    model.add(layers.Input(shape=(row,col,channel)))
     model.add(layers.Conv2D(32,kernel_size=(5,5)))
     model.add(layers.Activation('relu'))
     model.add(layers.Conv2D(64,kernel_size=(5,5)))
@@ -96,6 +100,7 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
     plotFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.png' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
+    historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
@@ -103,7 +108,8 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileList = []
     for epoch in range(1,epochs+1):
         modelFileList.append('../model/'+name+'_intermediate_'+str(epoch).zfill(3)+'.h5')
-    bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
+    utils.selectBestModelHistory(modelFileList,historyFileName)
+    # bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
 ############################################################
 
 
@@ -121,9 +127,10 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
     # optimizer = optimizers.RMSprop(learning_rate=0.001, decay=1e-6)
     optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
+    [N,row,col,channel] = xTrain.shape
     
     model = keras.Sequential()
-    model.add(layers.Input(shape=(32,32,1)))
+    model.add(layers.Input(shape=(row,col,channel)))
     model.add(layers.Conv2D(32, kernel_size=(3,3), padding='same'))
     model.add(layers.Activation('relu'))
     model.add(layers.Conv2D(32, kernel_size=(3,3)))
@@ -151,6 +158,7 @@ def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
     plotFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.png' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
+    historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
@@ -158,7 +166,8 @@ def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileList = []
     for epoch in range(1,epochs+1):
         modelFileList.append('../model/'+name+'_intermediate_'+str(epoch).zfill(3)+'.h5')
-    bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
+    utils.selectBestModelHistory(modelFileList,historyFileName)
+    # bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
 ############################################################
 
 
@@ -172,9 +181,10 @@ def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 ############################################################
 def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
     optimizer = optimizers.SGD(learning_rate=1.0,momentum=0.99,nesterov=False)
+    [N,row,col,channel] = xTrain.shape
     
     model = keras.Sequential()
-    model.add(layers.Input(shape=(32,32,1)))
+    model.add(layers.Input(shape=(row,col,channel)))
     model.add(layers.Conv2D(filters=32,kernel_size=(3,3)))
     model.add(layers.BatchNormalization())
     model.add(layers.Activation('relu'))
@@ -205,6 +215,7 @@ def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
     plotFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.png' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
+    historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
@@ -212,7 +223,8 @@ def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileList = []
     for epoch in range(1,epochs+1):
         modelFileList.append('../model/'+name+'_intermediate_'+str(epoch).zfill(3)+'.h5')
-    bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
+    utils.selectBestModelHistory(modelFileList,historyFileName)
+    # bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
 ############################################################
 
 
@@ -230,9 +242,10 @@ def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
     # optimizer = optimizers.RMSprop(learning_rate=0.001,decay=1e-6)
     optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
+    [N,row,col,channel] = xTrain.shape
     
     model = keras.Sequential()
-    model.add(layers.Input(shape=(32,32,1)))
+    model.add(layers.Input(shape=(row,col,channel)))
     model.add(layers.Conv2D(32, (3,3), padding='same'))
     model.add(layers.Activation('relu'))
     model.add(layers.Conv2D(32, (3,3)))
@@ -260,6 +273,7 @@ def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
     plotFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.png' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
+    historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
@@ -267,7 +281,8 @@ def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileList = []
     for epoch in range(1,epochs+1):
         modelFileList.append('../model/'+name+'_intermediate_'+str(epoch).zfill(3)+'.h5')
-    bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
+    utils.selectBestModelHistory(modelFileList,historyFileName)
+    # bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
 ############################################################
 
 
@@ -278,8 +293,9 @@ def trainUsingVGG16(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,bat
     # optimizer = optimizers.RMSprop(learning_rate=0.01)
     optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
     # optimizer = optimizers.SGD(learning_rate=0.1,momentum=0.99,nesterov=False)
+    [N,row,col,channel] = xTrain.shape
     
-    vgg16 = VGG16(input_shape=[64,64,3],weights='imagenet',include_top=False)
+    vgg16 = VGG16(input_shape=[row,col,channel],weights='imagenet',include_top=False)
     for layer in vgg16.layers:
         layer.trainable = False
         
@@ -295,6 +311,7 @@ def trainUsingVGG16(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,bat
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
     plotFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.png' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
+    historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
     plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
@@ -302,7 +319,8 @@ def trainUsingVGG16(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,bat
     modelFileList = []
     for epoch in range(1,epochs+1):
         modelFileList.append('../model/'+name+'_intermediate_'+str(epoch).zfill(3)+'.h5')
-    bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
+    utils.selectBestModelHistory(modelFileList,historyFileName)
+    # bestModelFile = utils.selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd)
 ############################################################
 
 

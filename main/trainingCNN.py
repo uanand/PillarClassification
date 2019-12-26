@@ -12,13 +12,12 @@ import utils
 ############################################################
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='/home/utkarsh/Projects/PillarClassification/dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False)
-xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='/home/utkarsh/Projects/PillarClassification/dataset/labelledDataset.dat',numClasses=2,row=64,col=64,rotFlag=True,flipFlag=True,RGB=True)
+xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=224,col=224,rotFlag=True,flipFlag=True,RGB=True)
+# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=False,flipFlag=False,RGB=True)
 print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape)
 # Shape of training set - 48999, 32, 32, 1
 # Shape of test set - 5445, 32, 32, 1
 ############################################################
-
 
 ############################################################
 # TRAIN YOUR MODEL. BUILD MODEL IN A SEPARATE FUNCTION FILE
