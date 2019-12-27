@@ -12,7 +12,7 @@ import utils
 ############################################################
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=128,col=128,rotFlag=True,flipFlag=True,RGB=True)
+xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=224,col=224,rotFlag=False,flipFlag=False,RGB=True)
 # xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=224,col=224,rotFlag=False,flipFlag=False,RGB=True)
 print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape)
 # Shape of training set - 48999, 32, 32, 1
