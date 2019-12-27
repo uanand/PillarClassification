@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-plt.style.use('UMM_ISO9001')
+# plt.style.use('UMM_ISO9001')
 
 #######################################################################
 # PLOT THE VALIDATION AND TEST LOSS AND ACCURACY FOR THE FITTED MODELS
