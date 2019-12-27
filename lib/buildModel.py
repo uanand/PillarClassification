@@ -4,6 +4,7 @@ from tensorflow.keras.applications.vgg16 import VGG16
 
 import plot
 import utils
+import transform
 
 # optimizer = optimizers.Adadelta(learning_rate=0.001,rho=0.95,epsilon=1e-07)
 # optimizer = optimizers.Adagrad(learning_rate=0.001,initial_accumulator_value=0.1,epsilon=1e-07)
@@ -43,7 +44,7 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     filepath='../model/'+name+'_intermediate_{epoch:03d}.h5'
-    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',period=1)]
+    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq=1)]
     print(model.summary())
     
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
@@ -94,7 +95,7 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     filepath='../model/'+name+'_intermediate_{epoch:03d}.h5'
-    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',period=1)]
+    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq=1)]
     print(model.summary())
     
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
@@ -152,7 +153,7 @@ def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     filepath='../model/'+name+'_intermediate_{epoch:03d}.h5'
-    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',period=1)]
+    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq=1)]
     print(model.summary())
     
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
@@ -209,7 +210,7 @@ def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     filepath='../model/'+name+'_intermediate_{epoch:03d}.h5'
-    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',period=1)]
+    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq=1)]
     print(model.summary())
     
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
@@ -267,7 +268,7 @@ def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     filepath='../model/'+name+'_intermediate_{epoch:03d}.h5'
-    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',period=1)]
+    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq=1)]
     print(model.summary())
     
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
@@ -291,22 +292,24 @@ def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 ############################################################
 def trainUsingVGG16(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
     # optimizer = optimizers.RMSprop(learning_rate=0.01)
-    optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
-    # optimizer = optimizers.SGD(learning_rate=0.1,momentum=0.99,nesterov=False)
+    # optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
+    optimizer = optimizers.SGD(learning_rate=0.001,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
+    xTrain,xTest = transform.renormalizeDataset(xTrain,xTest,VGG=True)
     
-    vgg16 = VGG16(input_shape=[row,col,channel],weights='imagenet',include_top=False)
+    vgg16 = VGG16(input_shape=(row,col,channel),weights='imagenet',include_top=False)
     for layer in vgg16.layers:
         layer.trainable = False
         
     x = layers.Flatten()(vgg16.output)
-    # x = layers.Dense(100, activation='relu')(x)
+    x = layers.Dense(100, activation='relu')(x)
     x = layers.Dense(2, activation='softmax')(x)
     model = keras.Model(inputs=vgg16.input, outputs=x)
     
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     filepath='../model/'+name+'_intermediate_{epoch:03d}.h5'
-    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',period=1)]
+    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq=1)]
+    print(model.summary())
     
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
     plotFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.png' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)

@@ -73,3 +73,44 @@ def convetToRGB(xTrain,xTest):
         xTestRGB[i,:,:,2] = img
     return xTrainRGB,xTestRGB
 #######################################################################
+
+
+#######################################################################
+# RENORMALIZE DATASET TO DIFFERENT MODEL FORMATS
+#######################################################################
+def renormalizeDataset(xTrain,xTest,VGG):
+    if (VGG==True):
+        try:
+            [NTrain,rowTrain,colTrain,channelTrain] = xTrain.shape
+            [NTest,rowTest,colTest,channelTest] = xTest.shape
+            RGBFlag = True
+        except:
+            [NTrain,rowTrain,colTrain,channelTrain] = xTrain.shape
+            [NTest,rowTest,colTest,channelTest] = xTest.shape
+            RGBFlag = False
+            
+        xTrain *= 255; xTest *= 255
+        for i in range(NTrain):
+            if (RGBFlag==True):
+                rMean = numpy.mean(xTrain[i,:,:,0])
+                gMean = numpy.mean(xTrain[i,:,:,1])
+                bMean = numpy.mean(xTrain[i,:,:,2])
+                xTrain[i,:,:,0] -= rMean
+                xTrain[i,:,:,1] -= gMean
+                xTrain[i,:,:,2] -= bMean
+            elif (RGBFlag==False):
+                mean = numpy,mean(xTrain[i,:,:])
+                xTrain[i,:,:] -= mean
+        for i in range(NTest):
+            if (RGBFlag==True):
+                rMean = numpy.mean(xTest[i,:,:,0])
+                gMean = numpy.mean(xTest[i,:,:,1])
+                bMean = numpy.mean(xTest[i,:,:,2])
+                xTest[i,:,:,0] -= rMean
+                xTest[i,:,:,1] -= gMean
+                xTest[i,:,:,2] -= bMean
+            elif (RGBFlag==False):
+                mean = numpy,mean(xTest[i,:,:])
+                xTest[i,:,:] -= mean
+    return xTrain,xTest
+#######################################################################
