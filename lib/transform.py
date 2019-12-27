@@ -1,7 +1,6 @@
 import numpy
 import cv2
 from skimage.transform import rotate
-import matplotlib.pyplot as plt
 
 #######################################################################
 # ROTATE THE TRAINING DATASET TO GENERATE MORE IMAGES FOR TRAINING

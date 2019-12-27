@@ -2,7 +2,7 @@ from tensorflow import keras
 from tensorflow.keras import layers,optimizers
 from tensorflow.keras.applications.vgg16 import VGG16
 
-import plot
+# import plot
 import utils
 import transform
 
@@ -52,7 +52,7 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
-    plot.plotMetrics(plotFileName,history)
+    # plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
     
     modelFileList = []
@@ -103,7 +103,7 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
-    plot.plotMetrics(plotFileName,history)
+    # plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
     
     modelFileList = []
@@ -161,7 +161,7 @@ def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
-    plot.plotMetrics(plotFileName,history)
+    # plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
     
     modelFileList = []
@@ -218,7 +218,7 @@ def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
-    plot.plotMetrics(plotFileName,history)
+    # plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
     
     modelFileList = []
@@ -276,7 +276,7 @@ def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
-    plot.plotMetrics(plotFileName,history)
+    # plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
     
     modelFileList = []
@@ -316,7 +316,7 @@ def trainUsingVGG16(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,bat
     modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
     historyFileName = plotFileName.replace('.png','.dat')
     model.save(modelFileName)
-    plot.plotMetrics(plotFileName,history)
+    # plot.plotMetrics(plotFileName,history)
     keras.backend.clear_session()
     
     modelFileList = []
