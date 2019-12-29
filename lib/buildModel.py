@@ -328,10 +328,25 @@ def trainUsingVGG16(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,bat
 
 
 ############################################################
-# LOAD A SAVED MODEL AND TRAIN IT WITH DIFFERENT LEARNING RATE
+# LOAD AN INTERMEDIATE MODEL AND IMPROVE USING DIFFERENT
+# OPTIMIZATION PARAMETERS
 ############################################################
-def trainIntermediateModel(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize,learningRate):
-    modelFileName = '../model/'+name
+def trainIntermediateModel(modelFile,name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,optimizer,epochs,batchSize):
+    model = keras.models.load_model('../model/'+modelFile+'.h5')
+    model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+    callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq=1)]
+    print(model.summary())
     
-    # TODO
+    history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
+    plotFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.png' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
+    modelFileName = '../model/'+name+'_epochs_%d_batchsize_%d_trainAcc_%.2f_testAcc_%.2f.h5' %(epochs,batchSize,history.history['accuracy'][-1]*100,history.history['val_accuracy'][-1]*100)
+    historyFileName = plotFileName.replace('.png','.dat')
+    model.save(modelFileName)
+    plot.plotMetrics(plotFileName,history)
+    keras.backend.clear_session()
     
+    modelFileList = []
+    for epoch in range(1,epochs+1):
+        modelFileList.append('../model/'+name+'_intermediate_'+str(epoch).zfill(3)+'.h5')
+    utils.selectBestModelHistory(modelFileList,historyFileName)
+############################################################

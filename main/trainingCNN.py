@@ -32,9 +32,19 @@ buildModel.trainUsingVGG16(name='vgg16_newData',xTrain=xTrain,yTrain=yTrain,yTra
 
 
 ############################################################
-# TRAIN INTERMEDIATE MODEL WITH A DIFFERENT LEARNING RATE
+# TRAIN SAVED MODEL WITH A DIFFERENT OPTIMIZATION PARAMTERS
 ############################################################
-# buildModel.trainIntermediateModel(name='',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=500,batchSize=1000,learningRate=0.001)
+# optimizer = optimizers.Adadelta(learning_rate=0.001,rho=0.95,epsilon=1e-07)
+# optimizer = optimizers.Adagrad(learning_rate=0.001,initial_accumulator_value=0.1,epsilon=1e-07)
+# optimizer = optimizers.Adam(learning_rate=0.001,beta_1=0.9,beta_2=0.999,epsilon=1e-07,amsgrad=False)
+# optimizer = optimizers.Adamax(learning_rate=0.001,beta_1=0.9,beta_2=0.999,epsilon=1e-07)
+# optimizer = optimizers.Ftrl(learning_rate=0.001,learning_rate_power=-0.5,initial_accumulator_value=0.1,l1_regularization_strength=0.0,l2_regularization_strength=0.0)
+# optimizer = optimizers.Nadam(learning_rate=0.001,beta_1=0.9,beta_2=0.999,epsilon=1e-07)
+# optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
+optimizer = optimizers.SGD(learning_rate=0.001,momentum=0.99,nesterov=False)
+
+buildModel.trainIntermediateModel(modelFile='',name='',xTrain=xTrainVehicles,yTrain=yTrainVehicles,yTrainInd=yTrainIndVehicles,xTest=xTestVehicles,yTest=yTestVehicles,yTestInd=yTestIndVehicles,optimizer=optimizer,epochs=20,batchSize=1000)
+############################################################
 
 
 ############################################################
