@@ -168,3 +168,13 @@ def imagesForLabelDataset(fileName,numClasses,dirList):
         gImg = numpy.reshape(x[i,:],(32,32))
         cv2.imwrite(dirList[y[i]]+'/'+str(i+1).zfill(6)+'.png',gImg)
 ############################################################
+
+
+############################################################
+# 
+############################################################
+def saveHistory(fileName,history):
+    f = open(fileName,'w')
+    f.write(str(history.history))
+    f.close()
+############################################################
