@@ -1,8 +1,9 @@
 import os
 import sys
-from tqdm import tqdm
 import numpy
 import cv2
+from tqdm import tqdm
+from tensorflow.keras import optimizers
 
 sys.path.append(os.path.abspath('../lib'))
 import loadData
@@ -13,7 +14,7 @@ import utils
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
 xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False)
-# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=224,col=224,rotFlag=False,flipFlag=False,RGB=True)
+# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=False,flipFlag=False,RGB=False)
 print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape)
 # Shape of training set - 48999, 32, 32, 1
 # Shape of test set - 5445, 32, 32, 1
@@ -22,9 +23,9 @@ print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape)
 ############################################################
 # TRAIN YOUR MODEL. BUILD MODEL IN A SEPARATE FUNCTION FILE
 ############################################################
-buildModel.model_01(name='model_01_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=1000)
-buildModel.model_02(name='model_02_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=1000)
-buildModel.model_03(name='model_03_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=1000)
+buildModel.model_01(name='model_01_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=2,batchSize=32)
+buildModel.model_02(name='model_02_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=2,batchSize=32)
+buildModel.model_03(name='model_03_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=2,batchSize=32)
 # buildModel.model_04(name='model_04_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=200)
 # buildModel.model_05(name='model_05_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=200)
 # buildModel.trainUsingVGG16(name='vgg16_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=20,batchSize=200)
@@ -43,7 +44,8 @@ buildModel.model_03(name='model_03_newData',xTrain=xTrain,yTrain=yTrain,yTrainIn
 # optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
 # optimizer = optimizers.SGD(learning_rate=0.001,momentum=0.99,nesterov=False)
 
-# buildModel.trainIntermediateModel(modelFile='',name='',xTrain=xTrainVehicles,yTrain=yTrainVehicles,yTrainInd=yTrainIndVehicles,xTest=xTestVehicles,yTest=yTestVehicles,yTestInd=yTestIndVehicles,optimizer=optimizer,epochs=20,batchSize=1000)
+# optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
+# buildModel.trainIntermediateModel(modelFile='model_02_partialData_epochs_20_batchsize_32_trainAcc_98.41_testAcc_98.02',name='model_02_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,optimizer=optimizer,epochs=50,batchSize=32,bestModelMode='all')
 ############################################################
 
 
