@@ -1,0 +1,38 @@
+############################################################
+Tests with Model 1
+Training summary for model 1 using the new training dataset
+Model - 
+Layer (type)                 Output Shape              Param #   
+=================================================================
+flatten (Flatten)            (None, 1024)              0         
+dense (Dense)                (None, 512)               524800    
+activation (Activation)      (None, 512)               0         
+dropout (Dropout)            (None, 512)               0         
+dense_1 (Dense)              (None, 512)               262656    
+activation_1 (Activation)    (None, 512)               0         
+dropout_1 (Dropout)          (None, 512)               0         
+dense_2 (Dense)              (None, 256)               131328    
+activation_2 (Activation)    (None, 256)               0         
+dropout_2 (Dropout)          (None, 256)               0         
+dense_3 (Dense)              (None, 2)                 514       
+activation_3 (Activation)    (None, 2)                 0         
+=================================================================
+Total params: 919,298
+Trainable params: 919,298
+Non-trainable params: 0
+Dropout value is 0.5
+
+1. Train 50 epochs at learning rate of 0.01. Best model is model_01_newData_intermediate_003_accuracy_trainAcc_96.97_testAcc_98.07.h5
+2. Train above for 50 epochs at learning rate of 0.001. Best model is model_01_newData_intermediate_003_intermediate_012_accuracy_trainAcc_98.20_testAcc_98.32.h5
+3. Train above for 50 epochs at learning rate of 0.0001. Best model is model_01_newData_intermediate_003_intermediate_012_intermediate_044_loss_trainAcc_98.22_testAcc_98.13.h5
+
+It seems the model has learnt all it could. The best possible accuracy is 98.22%. Try different models types for more accurate predictions.
+############################################################
+
+############################################################
+Tests with Model 2
+Training summary for model 2 using the new training dataset
+Model -
+
+
+############################################################
