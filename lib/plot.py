@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 plt.style.use('UMM_ISO9001')
 
-#######################################################################
+############################################################
 # PLOT THE VALIDATION AND TEST LOSS AND ACCURACY FOR THE FITTED MODELS
-#######################################################################
+############################################################
 def plotMetrics(fileName,history):
     lossTrain,accuracyTrain = history.history['loss'],history.history['accuracy']
     lossTest,accuracyTest = history.history['val_loss'],history.history['val_accuracy']
@@ -32,4 +32,4 @@ def plotMetrics(fileName,history):
     f = open(fileName.replace('.png','.dat'),'w')
     f.write(str(history.history))
     f.close()
-#######################################################################
+############################################################

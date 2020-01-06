@@ -1,6 +1,7 @@
 from tensorflow import keras
 from tensorflow.keras import layers,optimizers
 from tensorflow.keras.applications.vgg16 import VGG16
+import matplotlib.pyplot as plt
 
 import plot
 import utils
@@ -24,6 +25,7 @@ import transform
 # DENSE (2), SOFTMAX
 ############################################################
 def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
+    # optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
     optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
@@ -71,7 +73,6 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
-    # optimizer = optimizers.RMSprop(learning_rate=0.001)
     optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
@@ -96,7 +97,6 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     filepath='../model/'+name+'_intermediate_{epoch:03d}.h5'
     callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq='epoch')]
-    callbacks_list = []
     print(model.summary())
     
     history = model.fit(xTrain,yTrainInd,epochs=epochs,batch_size=batchSize,validation_data=(xTest,yTestInd),callbacks=callbacks_list)
@@ -124,7 +124,6 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
-    # optimizer = optimizers.RMSprop(learning_rate=0.001, decay=1e-6)
     optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
