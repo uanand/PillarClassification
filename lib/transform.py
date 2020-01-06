@@ -2,25 +2,27 @@ import numpy
 import cv2
 from skimage.transform import rotate
 
-#######################################################################
+import imageProcess
+
+############################################################
 # ROTATE THE TRAINING DATASET TO GENERATE MORE IMAGES FOR TRAINING
-#######################################################################
+############################################################
 def rotateDataset(x,y,angle):
     [rowDataset,colDataset] = x.shape
     row,col = int(numpy.sqrt(colDataset)),int(numpy.sqrt(colDataset))
     xRot = x.copy(); xRot[:] = 0;
     yRot = y.copy()
+    gImgRot = numpy.zeros([row,col],dtype='uint8')
     for i in range(rowDataset):
         gImg = numpy.reshape(x[i,:],(row,col))
-        gImgRot = rotate(gImg,angle)
+        gImgRot = numpy.round((rotate(gImg,angle)*255)).astype('uint8')
         xRot[i,:] = gImgRot.flatten()
     return xRot,yRot
-#######################################################################
+############################################################
 
-
-#######################################################################
+############################################################
 # FLIP THE DATASET AROUND THE HORIZINTAL AND VERTICAL AXES
-#######################################################################
+############################################################
 def flipDataset(x,y):
     [rowDataset,colDataset] = x.shape
     row,col = int(numpy.sqrt(colDataset)),int(numpy.sqrt(colDataset))
@@ -35,28 +37,25 @@ def flipDataset(x,y):
     xFlip = numpy.row_stack((xFlipHor,xFlipVer))
     yFlip = numpy.concatenate((yFlipHor,yFlipVer))
     return xFlip,yFlip
-#######################################################################
+############################################################
 
-
-#######################################################################
+############################################################
 # RESIZE THE TRAINING DATASET
-#######################################################################
+############################################################
 def resizeDataset(x,size):
     [rowDataset,colDataset] = x.shape
     row,col = int(numpy.sqrt(colDataset)),int(numpy.sqrt(colDataset))
     xResize = numpy.zeros([rowDataset,size[0]*size[1]],dtype='uint8')
     for i in range(rowDataset):
         gImg = numpy.reshape(x[i,:],(row,col))
-        # gImgResize = cv2.resize(gImg,size,interpolation=cv2.INTER_AREA)
         gImgResize = cv2.resize(gImg,size,interpolation=cv2.INTER_LINEAR)
         xResize[i,:] = gImgResize.flatten()
     return xResize
-#######################################################################
+############################################################
 
-
-#######################################################################
+############################################################
 # CONVERT THE DATASET TO RGB FORMAT
-#######################################################################
+############################################################
 def convetToRGB(xTrain,xTest):
     xTrainRGB = numpy.zeros([xTrain.shape[0],xTrain.shape[1],xTrain.shape[2],3],dtype='uint8')
     xTestRGB = numpy.zeros([xTest.shape[0],xTest.shape[1],xTest.shape[2],3],dtype='uint8')
@@ -71,12 +70,11 @@ def convetToRGB(xTrain,xTest):
         xTestRGB[i,:,:,1] = img
         xTestRGB[i,:,:,2] = img
     return xTrainRGB,xTestRGB
-#######################################################################
+############################################################
 
-
-#######################################################################
+############################################################
 # RENORMALIZE DATASET TO DIFFERENT MODEL FORMATS
-#######################################################################
+############################################################
 def renormalizeDataset(xTrain,xTest,VGG):
     if (VGG==True):
         try:
@@ -89,6 +87,7 @@ def renormalizeDataset(xTrain,xTest,VGG):
             RGBFlag = False
             
         xTrain *= 255; xTest *= 255
+        print (xTrain.dtype,xTest.dtype)
         for i in range(NTrain):
             if (RGBFlag==True):
                 rMean = numpy.mean(xTrain[i,:,:,0])
@@ -112,4 +111,19 @@ def renormalizeDataset(xTrain,xTest,VGG):
                 mean = numpy,mean(xTest[i,:,:])
                 xTest[i,:,:] -= mean
     return xTrain,xTest
-#######################################################################
+############################################################
+
+############################################################
+# NORMALIZE EACH IMAGE BETWEEN 0-255
+############################################################
+def normalizeDataset(x):
+    try:
+        [rowDataset,colDataset] = x.shape
+        for i in range(rowDataset):
+            x[i,:] = imageProcess.normalize(x[i,:])
+    except:
+        [N,row,col,channel] = x.shape
+        for i in range(N):
+            x[i,:,:,:] = imageProcess.normalize(x[i,:,:,:])
+    return x
+############################################################

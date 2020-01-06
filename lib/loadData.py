@@ -41,12 +41,14 @@ def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,
     xTest = transform.resizeDataset(xTest,(row,col))
     xTrain = numpy.reshape(xTrain,(xTrain.shape[0],row,col,1))
     xTest = numpy.reshape(xTest,(xTest.shape[0],row,col,1))
+    xTrain = transform.normalizeDataset(xTrain)
+    xTest = transform.normalizeDataset(xTest)
     
     if (RGB==True):
         xTrain,xTest = transform.convetToRGB(xTrain,xTest)
         
     xTrain,xTest = xTrain.astype('float32'),xTest.astype('float32')
-    xTrain/=255; xTest/=255
+    xTrain/=255.0; xTest/=255.0
     yTrain,yTest = yTrain.astype('uint8'),yTest.astype('uint8')
     
     yTrainInd = y2indicator(yTrain,numClasses)
