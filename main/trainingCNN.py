@@ -2,6 +2,7 @@ import os
 import sys
 import numpy
 import cv2
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 from tensorflow.keras import optimizers
 
@@ -13,9 +14,13 @@ import utils
 ############################################################
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False)
-# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=False,flipFlag=False,RGB=False)
-print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape)
+# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False)
+xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False)
+print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape,numpy.sum(yTrainInd,axis=0),numpy.sum(yTestInd,axis=0))
+
+# for i in range(10):
+    # # plt.figure(), plt.imshow(xTrain[i,:,:,:]), plt.show()
+    # plt.figure(), plt.imshow(xTrain[i,:,:,0]), plt.title(yTrain[i]), plt.show()
 # Shape of training set - 48999, 32, 32, 1
 # Shape of test set - 5445, 32, 32, 1
 ############################################################
@@ -23,12 +28,12 @@ print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape)
 ############################################################
 # TRAIN YOUR MODEL. BUILD MODEL IN A SEPARATE FUNCTION FILE
 ############################################################
-buildModel.model_01(name='model_01_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=2,batchSize=32)
-buildModel.model_02(name='model_02_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=2,batchSize=32)
-buildModel.model_03(name='model_03_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=2,batchSize=32)
+# buildModel.model_01(name='model_01_test',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=128)
+buildModel.model_02(name='model_02_test',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=128)
+# buildModel.model_03(name='model_03_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=2,batchSize=32)
 # buildModel.model_04(name='model_04_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=200)
 # buildModel.model_05(name='model_05_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=200)
-# buildModel.trainUsingVGG16(name='vgg16_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=20,batchSize=200)
+# buildModel.trainUsingVGG16(name='vgg16_oldData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=20,batchSize=32)
 ############################################################
 
 
