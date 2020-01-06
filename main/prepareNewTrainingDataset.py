@@ -101,7 +101,7 @@ for sheetName in sheetNameList:
             classifiedpngFile = inputFile.replace('.dm4','_manual.png') 
             
         cropSize = int(round(max(2.0*0.75*(colTopRight-colTopLeft)/(numPillarsInRow-1),2.0*0.75*(rowBottomLeft-rowTopLeft)/(numPillarsInCol-1))))
-        gImg = cv2.imread(pngFile,0)
+        gImg = imageProcess.readDM4(inputFile)
         gImgClassified = cv2.imread(classifiedpngFile,0)
         [row,col] = gImg.shape
         
@@ -127,7 +127,7 @@ for sheetName in sheetNameList:
                         outFile.write('0\t')
                     else:
                         outFile.write('1\t')
-                    gImgCrop = cv2.resize(gImgCrop,(64,64),interpolation=cv2.INTER_AREA)
+                    gImgCrop = cv2.resize(gImgCrop,(64,64),interpolation=cv2.INTER_LINEAR)
                     for pixel in gImgCrop.flatten()[:-1]:
                         outFile.write('%d\t' %(pixel))
                     outFile.write('%d\n' %(gImgCrop.flatten()[-1]))
