@@ -48,7 +48,6 @@ def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
         pass
 ############################################################
 
-
 ############################################################
 # SELECT THE BEST MODEL BASED ON ACCURACY AND LOSS VALUES USING
 # THE HISTORY DICTIONARY
@@ -83,7 +82,6 @@ def selectBestModelHistory(modelFileList,history):
         pass
 ############################################################
 
-
 ############################################################
 # CONVERT Y TO AN INDICATOR MATRIX
 ############################################################
@@ -94,7 +92,6 @@ def y2indicator(y,numClasses):
         yInd[i,y[i]] = 1
     return yInd
 ############################################################
-
 
 ############################################################
 # READ THE HISTORY DICTIONARY SAVED AFTER MODEL RUN
@@ -128,21 +125,24 @@ def parseHistoryDict(inputFile):
     return lossTrain,accuracyTrain,lossTest,accuracyTest
 ############################################################
 
-
 ############################################################
 # GENERATE IMAGES FOR FALSE DETECTION
 ############################################################
 def falseClassificationImage(modelPath,imagePath,X,Y):
+    [N,row,col,channel] = X.shape
     counter = 0
     model = keras.models.load_model(modelPath)
     for i,(x,y) in enumerate(zip(X,Y)):
-        gImg = numpy.reshape(x,(1,32,32,1))
-        gImgRaw = (numpy.reshape(gImg,(32,32))*255).astype('uint8')
+        gImg = numpy.reshape(x,(1,row,col,channel))
+        gImgRaw = (numpy.reshape(gImg,(row,col,channel))*255).astype('uint8')
         if (y==0):
             assignedLabel = 'Collapse'
         else:
             assignedLabel = 'Not collapse'
-        res = model.predict_classes(gImg,batch_size=1)[0]
+        try:
+            res = model.predict_classes(gImg,batch_size=1)[0]
+        except:
+            res = numpy.argmax(model.predict(gImg,batch_size=1))
         keras.backend.clear_session()
         if (res==0):
             predictLabel = 'Collapse'
@@ -152,9 +152,8 @@ def falseClassificationImage(modelPath,imagePath,X,Y):
             print(i+1,assignedLabel,predictLabel)
             cv2.imwrite(imagePath+'/'+str(i+1).zfill(6)+'.png',gImgRaw)
             counter+=1
-    print ("Percentage of incorrect classification = %.2f" %(100.0*counter/X.shape[0]))
+    print ("Percentage of incorrect classification = %.2f" %(100.0*counter/N))
 ############################################################
-
 
 ############################################################
 # GENERATE IMAGES FOR LABELLED DATASET
@@ -169,12 +168,23 @@ def imagesForLabelDataset(fileName,numClasses,dirList):
         cv2.imwrite(dirList[y[i]]+'/'+str(i+1).zfill(6)+'.png',gImg)
 ############################################################
 
-
 ############################################################
-# 
+# SAVE THE KERAS TRAINING DICTIONARY AS A TEXT FILE
 ############################################################
 def saveHistory(fileName,history):
     f = open(fileName,'w')
     f.write(str(history.history))
     f.close()
+############################################################
+
+############################################################
+# TEST THE MODEL ACCURACY FOR TRAINING AND TEST DATASETS
+############################################################
+def modelAccuracy(modelFile,xTrain,yTrainInd,xTest,yTestInd):
+    nTrain,nTest = xTrain.shape[0],xTest.shape[0]
+    model = keras.models.load_model(modelFile)
+    scoresTrain = model.evaluate(xTrain,yTrainInd,verbose=0)
+    scoresTest = model.evaluate(xTest,yTestInd,verbose=0)
+    keras.backend.clear_session()
+    print (scoresTrain,scoresTest)
 ############################################################

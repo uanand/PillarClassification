@@ -2,20 +2,21 @@ import os
 import sys
 import numpy
 import cv2
-import matplotlib.pyplot as plt
 from tqdm import tqdm
 from tensorflow.keras import optimizers
+import matplotlib.pyplot as plt
 
 sys.path.append(os.path.abspath('../lib'))
-import loadData
 import buildModel
+import loadData
 import utils
+import transform
 
 ############################################################
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False)
-xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False)
+xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=True,shuffleFlag=True)
+# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=True,shuffleFlag=True)
 print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape,numpy.sum(yTrainInd,axis=0),numpy.sum(yTestInd,axis=0))
 
 # for i in range(10):
@@ -29,11 +30,11 @@ print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape,numpy.sum(yTrainI
 # TRAIN YOUR MODEL. BUILD MODEL IN A SEPARATE FUNCTION FILE
 ############################################################
 # buildModel.model_01(name='model_01_test',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=128)
-buildModel.model_02(name='model_02_test',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=128)
-# buildModel.model_03(name='model_03_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=2,batchSize=32)
+# buildModel.model_02(name='model_02_20200106',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=128)
+# buildModel.model_03(name='model_03_20200106',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=1000)
 # buildModel.model_04(name='model_04_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=200)
 # buildModel.model_05(name='model_05_newData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=50,batchSize=200)
-# buildModel.trainUsingVGG16(name='vgg16_oldData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=20,batchSize=32)
+# buildModel.trainUsingVGG16(name='vgg16_20200107',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=20,batchSize=128)
 ############################################################
 
 
@@ -49,8 +50,8 @@ buildModel.model_02(name='model_02_test',xTrain=xTrain,yTrain=yTrain,yTrainInd=y
 # optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
 # optimizer = optimizers.SGD(learning_rate=0.001,momentum=0.99,nesterov=False)
 
-# optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
-# buildModel.trainIntermediateModel(modelFile='model_02_partialData_epochs_20_batchsize_32_trainAcc_98.41_testAcc_98.02',name='model_02_fullData',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,optimizer=optimizer,epochs=50,batchSize=32,bestModelMode='all')
+# optimizer = optimizers.SGD(learning_rate=0.001,momentum=0.99,nesterov=False)
+# buildModel.trainIntermediateModel(modelFile='vgg16_20200107_intermediate_003_intermediate_020_intermediate_030_accuracy_trainAcc_99.77_testAcc_99.76',name='vgg16_20200107_intermediate_003_intermediate_020_intermediate_030',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,optimizer=optimizer,epochs=100,batchSize=128,bestModelMode='all')
 ############################################################
 
 
@@ -58,10 +59,28 @@ buildModel.model_02(name='model_02_test',xTrain=xTrain,yTrain=yTrain,yTrainInd=y
 # RUN THE MODEL AND ON TEST AND TRAIN DATASET AND GENERATE
 # IMAGES FOR FALSE IDENTIFICATION
 ############################################################
-# modelPath = '/home/utkarsh/Projects/PillarClassification/model/model_01_intermediate_487_accuracy_trainAcc_99.94_testAcc_99.85.h5'
-# trainImagesPath = '/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/train'
-# testImagesPath = '/home/utkarsh/Projects/PillarClassification/dataset/incorrectClassifications/test'
+# trainImagesPath = '../dataset/incorrectClassifications/train'
+# testImagesPath = '../dataset/incorrectClassifications/test'
 
+# modelPath = '../model/model_01_test_intermediate_086_intermediate_091_accuracy_trainAcc_99.42_testAcc_99.47.h5'
+# print ('Classification using %s' %(modelPath))
+# utils.falseClassificationImage(modelPath,trainImagesPath,xTrain,yTrain)
+# utils.falseClassificationImage(modelPath,testImagesPath,xTest,yTest)
+
+# modelPath = '../model/model_02_20200106_intermediate_025_intermediate_007_accuracy_trainAcc_99.84_testAcc_99.83.h5'
+# print ('Classification using %s' %(modelPath))
+# utils.falseClassificationImage(modelPath,trainImagesPath,xTrain,yTrain)
+# utils.falseClassificationImage(modelPath,testImagesPath,xTest,yTest)
+
+# modelPath = '../model/vgg16_20200107_intermediate_003_intermediate_020_intermediate_030_intermediate_099_accuracy_trainAcc_99.93_testAcc_99.93.h5'
+# print ('Classification using %s' %(modelPath))
 # utils.falseClassificationImage(modelPath,trainImagesPath,xTrain,yTrain)
 # utils.falseClassificationImage(modelPath,testImagesPath,xTest,yTest)
 ############################################################
+
+############################################################
+# TEST THE ACCURACY FOR EACH OF THE FINAL SELECTED MODELS
+############################################################
+# utils.modelAccuracy('../model/model_01_test_intermediate_086_intermediate_091_accuracy_trainAcc_99.42_testAcc_99.47.h5',xTrain,yTrainInd,xTest,yTestInd)
+# utils.modelAccuracy('../model/model_02_20200106_intermediate_025_intermediate_007_accuracy_trainAcc_99.84_testAcc_99.83.h5',xTrain,yTrainInd,xTest,yTestInd)
+# utils.modelAccuracy('../model/vgg16_20200107_intermediate_003_intermediate_020_intermediate_030_intermediate_099_accuracy_trainAcc_99.93_testAcc_99.93.h5',xTrain,yTrainInd,xTest,yTestInd)
