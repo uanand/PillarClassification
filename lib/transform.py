@@ -57,8 +57,8 @@ def resizeDataset(x,size):
 # CONVERT THE DATASET TO RGB FORMAT
 ############################################################
 def convetToRGB(xTrain,xTest):
-    xTrainRGB = numpy.zeros([xTrain.shape[0],xTrain.shape[1],xTrain.shape[2],3],dtype='uint8')
-    xTestRGB = numpy.zeros([xTest.shape[0],xTest.shape[1],xTest.shape[2],3],dtype='uint8')
+    xTrainRGB = numpy.zeros([xTrain.shape[0],xTrain.shape[1],xTrain.shape[2],3])
+    xTestRGB = numpy.zeros([xTest.shape[0],xTest.shape[1],xTest.shape[2],3])
     for i in range(xTrain.shape[0]):
         img = xTrain[i,:,:,0]
         xTrainRGB[i,:,:,0] = img
@@ -87,7 +87,6 @@ def renormalizeDataset(xTrain,xTest,VGG):
             RGBFlag = False
             
         xTrain *= 255; xTest *= 255
-        print (xTrain.dtype,xTest.dtype)
         for i in range(NTrain):
             if (RGBFlag==True):
                 rMean = numpy.mean(xTrain[i,:,:,0])
