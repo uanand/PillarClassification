@@ -1,6 +1,7 @@
 import numpy
-import transform
 from sklearn.utils import shuffle
+
+import transform
 
 ############################################################
 # CONVERT Y TO AN INDICATOR MATRIX
@@ -16,7 +17,7 @@ def y2indicator(y,numClasses):
 ############################################################
 # LOAD THE LABELLED PILLAR DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False):
+def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False,shuffleFlag=True):
     labelledDataset = numpy.loadtxt(fileName,skiprows=1,dtype='uint8')
     [numLabelledDataset,temp] = labelledDataset.shape
     
@@ -33,7 +34,8 @@ def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,
         yOriginal = numpy.concatenate((yOriginal,yFlip))
         
     [rowDataset,colDataset] = xOriginal.shape
-    xOriginal,yOriginal = shuffle(xOriginal,yOriginal)
+    if (shuffleFlag==True):
+        xOriginal,yOriginal = shuffle(xOriginal,yOriginal)
     xTrain,yTrain = xOriginal[:int(0.9*rowDataset),:],yOriginal[:int(0.9*rowDataset)]
     xTest,yTest = xOriginal[int(0.9*rowDataset):,:],yOriginal[int(0.9*rowDataset):]
     
@@ -46,7 +48,6 @@ def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,
     
     if (RGB==True):
         xTrain,xTest = transform.convetToRGB(xTrain,xTest)
-        
     xTrain,xTest = xTrain.astype('float32'),xTest.astype('float32')
     xTrain/=255.0; xTest/=255.0
     yTrain,yTest = yTrain.astype('uint8'),yTest.astype('uint8')
@@ -54,8 +55,9 @@ def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,
     yTrainInd = y2indicator(yTrain,numClasses)
     yTestInd = y2indicator(yTest,numClasses)
     
-    xTrain,yTrain,yTrainInd = shuffle(xTrain,yTrain,yTrainInd)
-    xTest,yTest,yTestInd = shuffle(xTest,yTest,yTestInd)
-    
+    if (shuffleFlag==True):
+        xTrain,yTrain,yTrainInd = shuffle(xTrain,yTrain,yTrainInd)
+        xTest,yTest,yTestInd = shuffle(xTest,yTest,yTestInd)
+        
     return xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd
 ############################################################

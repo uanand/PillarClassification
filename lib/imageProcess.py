@@ -2,11 +2,9 @@ import numpy
 import hyperspy.api as hs
 from scipy import ndimage
 
-import imageProcess
-
-#######################################################################
+############################################################
 # NORMALIZE AN 8 BIT GRAYSCALE IMAGE
-#######################################################################
+############################################################
 def normalize(gImg, min=0, max=255):
     if (gImg.max() > gImg.min()):
         gImg = 1.0*(max-min)*(gImg - gImg.min())/(gImg.max() - gImg.min())
@@ -15,11 +13,11 @@ def normalize(gImg, min=0, max=255):
         gImg[:] = max
     gImg=gImg.astype('uint8')
     return gImg
-#######################################################################
+############################################################
 
-#######################################################################
+############################################################
 # READ GATAN DM3 OR DM4 FILES
-#######################################################################
+############################################################
 def readDM4(fileName):
     f = hs.load(fileName);
     gImg = f.data
@@ -27,13 +25,13 @@ def readDM4(fileName):
     highLimit = f.original_metadata['DocumentObjectList']['TagGroup0']['ImageDisplayInfo']['HighLimit']
     gImg[gImg<lowLimit] = lowLimit
     gImg[gImg>highLimit] = highLimit
-    gImg = imageProcess.normalize(gImg)
+    gImg = normalize(gImg)
     return gImg
-#######################################################################
+############################################################
 
-#######################################################################
+############################################################
 # REMOVE BINARY WHITE PARTICLES TOUCHING THE BOUNDARY
-#######################################################################
+############################################################
 def removeBoundaryParticles(bImg):
     [row,col] = bImg.shape
     labelImg,numLabel = ndimage.label(bImg)
@@ -42,4 +40,4 @@ def removeBoundaryParticles(bImg):
     for label in boundaryLabels:
         labelImg[labelImg==label] = 0
     return labelImg.astype('bool')
-#######################################################################
+############################################################

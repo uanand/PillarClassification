@@ -1,7 +1,6 @@
 from tensorflow import keras
 from tensorflow.keras import layers,optimizers
 from tensorflow.keras.applications.vgg16 import VGG16
-import matplotlib.pyplot as plt
 
 import plot
 import utils
@@ -26,7 +25,7 @@ import transform
 ############################################################
 def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
     # optimizer = optimizers.RMSprop(learning_rate=0.001,rho=0.9,momentum=0.0,epsilon=1e-07,centered=False)
-    optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
+    optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
     model = keras.Sequential()
@@ -124,7 +123,7 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
-    optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
+    optimizer = optimizers.SGD(learning_rate=0.001,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
     model = keras.Sequential()
