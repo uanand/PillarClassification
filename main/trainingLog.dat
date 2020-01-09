@@ -1,6 +1,6 @@
 ############################################################
 Tests with Model 1
-Training summary for model 1 using the new training dataset
+Training summary for model 1 using the old training dataset
 Model - 
 Layer (type)                 Output Shape              Param #   
 =================================================================
@@ -22,17 +22,139 @@ Trainable params: 919,298
 Non-trainable params: 0
 Dropout value is 0.5
 
-1. Train 50 epochs at learning rate of 0.01. Best model is model_01_newData_intermediate_003_accuracy_trainAcc_96.97_testAcc_98.07.h5
-2. Train above for 50 epochs at learning rate of 0.001. Best model is model_01_newData_intermediate_003_intermediate_012_accuracy_trainAcc_98.20_testAcc_98.32.h5
-3. Train above for 50 epochs at learning rate of 0.0001. Best model is model_01_newData_intermediate_003_intermediate_012_intermediate_044_loss_trainAcc_98.22_testAcc_98.13.h5
+Model in code - 
+=================================================================
+model = keras.Sequential()
+model.add(layers.Input(shape=(row,col,channel)))
+model.add(layers.Flatten())
+model.add(layers.Dense(512))
+model.add(layers.Activation('relu'))
+model.add(layers.Dropout(0.50))
+model.add(layers.Dense(512))
+model.add(layers.Activation('relu'))
+model.add(layers.Dropout(0.50))
+model.add(layers.Dense(256))
+model.add(layers.Activation('relu'))
+model.add(layers.Dropout(0.50))
+model.add(layers.Dense(2))
+model.add(layers.Activation('softmax'))
+model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+=================================================================
 
-It seems the model has learnt all it could. The best possible accuracy is 98.22%. Try different models types for more accurate predictions.
+1. Train 200 epochs using batch size 128 at learning rate of 0.0001. Best model is model_01_test_intermediate_086_accuracy_trainAcc_96.11_testAcc_96.70.h5. This training was done using the non-augmented dataset.
+2. Train above for 100 epochs using batch size 128 at learning rate of 0.000001. Best model is model_01_test_intermediate_086_intermediate_091_accuracy_trainAcc_99.42_testAcc_99.47.h5 (Selected as the best possible model)
+3. Train above for 100 epochs at learning rate of 0.0000001. Best model is model_01_test_intermediate_086_intermediate_091_intermediate_001_accuracy_trainAcc_99.45_testAcc_99.32.h5
+
+It seems the model has learnt all it could. The best possible accuracy is 99.47%.
+
+Training loss and accuracy - [0.021105374043319327, 0.99395907]
+Test loss and accuracy - [0.01708392968856284, 0.99651057]
 ############################################################
+
 
 ############################################################
 Tests with Model 2
-Training summary for model 2 using the new training dataset
-Model -
+Training summary for model 2 using the old training dataset
+Model - 
+Layer (type)                 Output Shape              Param #
+=================================================================
+conv2d_2 (Conv2D)            (None, 32, 32, 32)        832
+activation_5 (Activation)    (None, 32, 32, 32)        0
+conv2d_3 (Conv2D)            (None, 28, 28, 32)        25632
+activation_6 (Activation)    (None, 28, 28, 32)        0
+max_pooling2d_1 (MaxPooling2 (None, 14, 14, 32)        0
+dropout_3 (Dropout)          (None, 14, 14, 32)        0
+flatten_1 (Flatten)          (None, 6272)              0
+dense_3 (Dense)              (None, 256)               1605888
+activation_7 (Activation)    (None, 256)               0
+dropout_4 (Dropout)          (None, 256)               0
+dense_4 (Dense)              (None, 128)               32896
+activation_8 (Activation)    (None, 128)               0
+dropout_5 (Dropout)          (None, 128)               0
+dense_5 (Dense)              (None, 2)                 258
+activation_9 (Activation)    (None, 2)                 0
+=================================================================
+Total params: 1,665,506
+Trainable params: 1,665,506
+Non-trainable params: 0
+Dropout value is 0.5
+
+Model in code - 
+=================================================================
+model = keras.Sequential()
+model.add(layers.Input(shape=(row,col,channel)))
+model.add(layers.Conv2D(32,kernel_size=(5,5),padding='same'))
+model.add(layers.Activation('relu'))
+model.add(layers.Conv2D(32,kernel_size=(5,5)))
+model.add(layers.Activation('relu'))
+model.add(layers.MaxPooling2D(pool_size=(2,2)))
+model.add(layers.Dropout(0.50))
+model.add(layers.Flatten())
+model.add(layers.Dense(256))
+model.add(layers.Activation('relu'))
+model.add(layers.Dropout(0.50))
+model.add(layers.Dense(128))
+model.add(layers.Activation('relu'))
+model.add(layers.Dropout(0.50))
+model.add(layers.Dense(2))
+model.add(layers.Activation('softmax'))
+model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+=================================================================
+
+1. Train 200 epochs using batch size 128 at learning rate of 0.01. Best model is model_02_20200106_intermediate_025_accuracy_trainAcc_99.25_testAcc_99.72.h5. 
+2. Train 20 epochs using batch size 128 at learning rate of 0.001. Best model is model_02_20200106_intermediate_025_intermediate_007_accuracy_trainAcc_99.84_testAcc_99.83.h5.
+3. Train 20 epochs using batch size 128 at learning rate of 0.0001. Best model is model_02_20200106_intermediate_025_intermediate_007_intermediate_019_accuracy_trainAcc_99.88_testAcc_99.80.h5.
+
+It seems the model is overfitting as the difference in accuracy between training and test datasets is more. The best possible accuracy is 99.83%.
+
+Training loss and accuracy - [0.004022566618132077, 0.998551]
+Test loss and accuracy - [0.0038121855892980223, 0.99853075]
+############################################################
 
 
 ############################################################
+Tests with VGG Model
+Training summary for VGG model using the old training dataset
+Model - 
+Layer (type)                 Output Shape              Param #
+=================================================================
+input_1 (InputLayer)         [(None, 32, 32, 3)]       0
+block1_conv1 (Conv2D)        (None, 32, 32, 64)        1792
+block1_conv2 (Conv2D)        (None, 32, 32, 64)        36928
+block1_pool (MaxPooling2D)   (None, 16, 16, 64)        0
+block2_conv1 (Conv2D)        (None, 16, 16, 128)       73856
+block2_conv2 (Conv2D)        (None, 16, 16, 128)       147584
+block2_pool (MaxPooling2D)   (None, 8, 8, 128)         0
+block3_conv1 (Conv2D)        (None, 8, 8, 256)         295168
+block3_conv2 (Conv2D)        (None, 8, 8, 256)         590080
+block3_conv3 (Conv2D)        (None, 8, 8, 256)         590080
+block3_pool (MaxPooling2D)   (None, 4, 4, 256)         0
+block4_conv1 (Conv2D)        (None, 4, 4, 512)         1180160
+block4_conv2 (Conv2D)        (None, 4, 4, 512)         2359808
+block4_conv3 (Conv2D)        (None, 4, 4, 512)         2359808
+block4_pool (MaxPooling2D)   (None, 2, 2, 512)         0
+block5_conv1 (Conv2D)        (None, 2, 2, 512)         2359808
+block5_conv2 (Conv2D)        (None, 2, 2, 512)         2359808
+block5_conv3 (Conv2D)        (None, 2, 2, 512)         2359808
+block5_pool (MaxPooling2D)   (None, 1, 1, 512)         0
+flatten (Flatten)            (None, 512)               0
+dense (Dense)                (None, 100)               51300
+dense_1 (Dense)              (None, 2)                 202
+=================================================================
+Total params: 14,766,190
+Trainable params: 51,502
+Non-trainable params: 14,714,688
+No dropout used
+
+1. Train 20 epochs using batch size 128 at learning rate of 0.01. Best model is vgg16_20200107_intermediate_003_accuracy_trainAcc_89.96_testAcc_90.06.h5.
+2. Train 20 epochs using batch size 128 at learning rate of 0.0001. Best model is vgg16_20200107_intermediate_003_intermediate_020_accuracy_trainAcc_99.64_testAcc_99.56.h5.
+3. Train 50 epochs using batch size 128 at learning rate of 0.0001. Best model is vgg16_20200107_intermediate_003_intermediate_020_intermediate_030_accuracy_trainAcc_99.77_testAcc_99.76.h5.
+4. Train 100 epochs using batch size 128 at learning rate of 0.001. Best model is vgg16_20200107_intermediate_003_intermediate_020_intermediate_030_intermediate_099_accuracy_trainAcc_99.93_testAcc_99.93.h5.
+
+At the end of last 100 epochs the loss was still going down, although very slowly. It seems that if we continue running the model for another 100 epochs, we will be able to get a slighly better accuracy. But it takes  ~ 70 s to run 1 epoch on compute08. Best accuracy is 99.93%.
+
+Training loss and accuracy - [0.0018845232115958677, 0.9994286]
+Test loss and accuracy - [0.0016657251092899057, 0.9992654]
+############################################################
+
+For all the models, input image shape is 32x32. Number of channels for model 1 and model 2 is 1 and for VGG model is 3.
