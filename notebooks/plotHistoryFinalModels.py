@@ -10,9 +10,9 @@ plt.style.use('UMM_ISO9001')
 ############################################################
 # PLOTTING ACCURACY AND LOSS FOR MODEL 1
 ############################################################
-history1 = '/mnt/cbis/home/utkarsh/Projects/PillarClassification/model/model_01_test_epochs_200_batchsize_128_trainAcc_85.67_testAcc_96.70.dat'
-history2 = '/mnt/cbis/home/utkarsh/Projects/PillarClassification/model/model_01_test_intermediate_086_epochs_100_batchsize_128_trainAcc_98.74_testAcc_99.45.dat'
-history3 = '/mnt/cbis/home/utkarsh/Projects/PillarClassification/model/model_01_test_intermediate_086_intermediate_091_epochs_100_batchsize_128_trainAcc_98.94_testAcc_99.25.dat'
+history1 = '../model/model_01_test_epochs_200_batchsize_128_trainAcc_85.67_testAcc_96.70.dat'
+history2 = '../model/model_01_test_intermediate_086_epochs_100_batchsize_128_trainAcc_98.74_testAcc_99.45.dat'
+history3 = '../model/model_01_test_intermediate_086_intermediate_091_epochs_100_batchsize_128_trainAcc_98.94_testAcc_99.25.dat'
 
 loss1,accuracy1,val_loss1,val_accuracy1 = utils.parseHistoryDict(history1)
 loss2,accuracy2,val_loss2,val_accuracy2 = utils.parseHistoryDict(history2)
