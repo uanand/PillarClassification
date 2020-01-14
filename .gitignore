@@ -114,3 +114,4 @@ model/
 dataset/
 main/mprofile*
 notebooks/*.dat
+oldModel/
