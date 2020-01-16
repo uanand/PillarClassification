@@ -138,7 +138,7 @@ def falseClassificationImage(modelPath,imagePath,X,Y):
         if (y==0):
             assignedLabel = 'Collapse'
         else:
-            assignedLabel = 'Not collapse'
+            assignedLabel = 'Notcollapse'
         try:
             res = model.predict_classes(gImg,batch_size=1)[0]
         except:
@@ -147,7 +147,7 @@ def falseClassificationImage(modelPath,imagePath,X,Y):
         if (res==0):
             predictLabel = 'Collapse'
         elif (res==1):
-            predictLabel = 'Not collapse'
+            predictLabel = 'Notcollapse'
         if (assignedLabel!=predictLabel):
             print(i+1,assignedLabel,predictLabel)
             cv2.imwrite(imagePath+'/'+str(i+1).zfill(6)+'.png',gImgRaw)
