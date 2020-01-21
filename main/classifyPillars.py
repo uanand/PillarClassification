@@ -16,9 +16,11 @@ import imageProcess
 # FIND OUT IF THE PILLAR IS COLLAPSED OR NOT COLLAPSED USING ML MODEL
 ############################################################
 excelFileName = 'classifyPillars.xlsx'
-# sheetNameList = ['Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF','RestoreBy0.30%HF','RestoreBy0.10%HF']
-sheetNameList = ['RestoreBy0.30%HF']
-model = keras.models.load_model('../model/model_01_intermediate_487_accuracy_trainAcc_99.94_testAcc_99.85.h5')
+sheetNameList = ['Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF','RestoreBy0.30%HF','RestoreBy0.10%HF']
+
+model_DNN = keras.models.load_model('../model/model_01_test_intermediate_086_intermediate_091_accuracy_trainAcc_99.42_testAcc_99.47.h5')
+model_CNN = keras.models.load_model('../model/model_02_20200106_intermediate_025_intermediate_007_accuracy_trainAcc_99.84_testAcc_99.83.h5')
+model_VGG = keras.models.load_model('../model/vgg16_20200107_intermediate_003_intermediate_020_intermediate_030_intermediate_099_accuracy_trainAcc_99.93_testAcc_99.93.h5')
 
 for sheetName in sheetNameList:
     print('Processing %s sheet' %(sheetName))
@@ -58,11 +60,16 @@ for sheetName in sheetNameList:
                     counter += 1
                     gImgCrop = gImg[cropRowStart:cropRowEnd+1,cropColStart:cropColEnd+1]
                     gImgCrop = cv2.resize(gImgCrop,(32,32),interpolation=cv2.INTER_AREA)
+                    gImgCrop = imageProcess.normalize(gImgCrop)
+                    gImgCropRGB = imageProcess.convetToRGB(gImgCrop)
                     
-                    gImgCrop = gImgCrop.copy().astype('float32')
-                    gImgCrop /= 255
-                    gImgCrop = gImgCrop.reshape(1,32,32,1)
-                    res = model.predict_classes(gImgCrop,batch_size=1)[0]
+                    gImgCrop = gImgCrop.copy().astype('float32'); gImgCrop /= 255; gImgCrop = gImgCrop.reshape(1,32,32,1)
+                    gImgCropRGB = gImgCropRGB.copy().astype('float32'); gImgCropRGB /= 255; gImgCropRGB = gImgCropRGB.reshape(1,32,32,3)
+                    
+                    res_DNN = model_DNN.predict_classes(gImgCrop,batch_size=1)[0]
+                    res_CNN = model_CNN.predict_classes(gImgCrop,batch_size=1)[0]
+                    res_VGG = numpy.argmax(model_VGG.predict(gImgCropRGB,batch_size=1))
+                    res = min(res_DNN,res_CNN,res_VGG)
                     keras.backend.clear_session()
                     if (res==0):
                         gImgNorm = imageDraw.circle(gImgNorm,(r,c),radius=int(cropSize/4),thickness=8,color=255)
@@ -75,6 +82,6 @@ for sheetName in sheetNameList:
     del df,inputFile,colTopLeft,rowTopLeft,colTopRight,rowTopRight,colBottomRight,rowBottomRight,colBottomLeft,rowBottomLeft,numPillarsInRow,numPillarsInCol,cropSize,outputFile,tag,gImg,gImgNorm,row,col,topRowPillarCentre,bottomRowPillarCenter
     gc.collect()
     outFile.close()
-del excelFileName,sheetNameList,model,sheetName
+del excelFileName,sheetNameList,model_DNN,model_CNN,model_VGG,sheetName
 gc.collect()
 ############################################################
