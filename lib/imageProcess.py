@@ -41,3 +41,15 @@ def removeBoundaryParticles(bImg):
         labelImg[labelImg==label] = 0
     return labelImg.astype('bool')
 ############################################################
+
+############################################################
+# CONVERT THE IMAGE TO RGB FORMAT
+############################################################
+def convetToRGB(gImg):
+    [row,col] = numpy.shape(gImg)
+    gImgRGB = numpy.zeros([row,col,3],dtype=gImg.dtype)
+    gImgRGB[:,:,0] = gImg
+    gImgRGB[:,:,1] = gImg
+    gImgRGB[:,:,2] = gImg
+    return gImgRGB
+############################################################
