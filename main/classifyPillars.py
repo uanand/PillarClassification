@@ -17,7 +17,7 @@ import imageProcess
 # FIND OUT IF THE PILLAR IS COLLAPSED OR NOT COLLAPSED USING ML MODEL
 ############################################################
 excelFileName = 'classifyPillars.xlsx'
-sheetNameList = ['Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF','RestoreBy0.30%HF','RestoreBy0.10%HF']
+sheetNameList = ['Original','Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF','RestoreBy0.30%HF','RestoreBy0.10%HF']
 
 model_DNN = keras.models.load_model('../model/model_01_test_intermediate_086_intermediate_091_accuracy_trainAcc_99.42_testAcc_99.47.h5')
 model_CNN = keras.models.load_model('../model/model_02_20200106_intermediate_025_intermediate_007_accuracy_trainAcc_99.84_testAcc_99.83.h5')
@@ -28,8 +28,14 @@ for sheetName in sheetNameList:
     df = pandas.read_excel(excelFileName,sheet_name=sheetName,names=['inputFile','colTopLeft','rowTopLeft','colTopRight','rowTopRight','colBottomRight','rowBottomRight','colBottomLeft','rowBottomLeft','numPillarsInRow','numPillarsInCol'],inplace=True)
     
     counter = 0
-    outFile = open(sheetName+'.dat','w')
-    outFile.write('InputFile\tTag\tPillarID\tCropStartRow\tCropStartCol\tCropEndRow\tCropEndCol\tClassificationClass\tClassificationClassLabel\n')
+    outFile_DNN = open(sheetName+'_DNN.dat','w')
+    outFile_CNN = open(sheetName+'_CNN.dat','w')
+    outFile_VGG = open(sheetName+'_VGG.dat','w')
+    outFile_ALL = open(sheetName+'_ALL.dat','w')
+    outFile_DNN.write('InputFile\tTag\tPillarID\tCropStartRow\tCropStartCol\tCropEndRow\tCropEndCol\tClassificationClass\tClassificationClassLabel\n')
+    outFile_CNN.write('InputFile\tTag\tPillarID\tCropStartRow\tCropStartCol\tCropEndRow\tCropEndCol\tClassificationClass\tClassificationClassLabel\n')
+    outFile_VGG.write('InputFile\tTag\tPillarID\tCropStartRow\tCropStartCol\tCropEndRow\tCropEndCol\tClassificationClass\tClassificationClassLabel\n')
+    outFile_ALL.write('InputFile\tTag\tPillarID\tCropStartRow\tCropStartCol\tCropEndRow\tCropEndCol\tClassificationClass\tClassificationClassLabel\n')
     for inputFile,colTopLeft,rowTopLeft,colTopRight,rowTopRight,colBottomRight,rowBottomRight,colBottomLeft,rowBottomLeft,numPillarsInRow,numPillarsInCol in df.values:
         cropSize = int(round(max(2.0*0.75*(colTopRight-colTopLeft)/(numPillarsInRow-1),2.0*0.75*(rowBottomLeft-rowTopLeft)/(numPillarsInCol-1))))
         if ('.dm3' in inputFile):
@@ -70,19 +76,25 @@ for sheetName in sheetNameList:
                     res_DNN = model_DNN.predict_classes(gImgCrop,batch_size=1)[0]
                     res_CNN = model_CNN.predict_classes(gImgCrop,batch_size=1)[0]
                     res_VGG = numpy.argmax(model_VGG.predict(gImgCropRGB,batch_size=1))
-                    res = min(res_DNN,res_CNN,res_VGG)
+                    res_ALL = min(res_DNN,res_CNN,res_VGG)
                     keras.backend.clear_session()
-                    if (res==0):
+                    if (res_ALL==0):
                         gImgNorm = imageDraw.circle(gImgNorm,(r,c),radius=int(cropSize/4),thickness=8,color=255)
                         label = 'Collapse'
-                    elif (res==1):
+                    elif (res_ALL==1):
                         gImgNorm = imageDraw.circle(gImgNorm,(r,c),radius=int(cropSize/4),thickness=8,color=0)
                         label = 'Not collapse'
-                    outFile.write('%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n' %(inputFile,tag,pillarID,cropRowStart,cropColStart,cropRowEnd,cropColEnd,res,label))
+                    outFile_DNN.write('%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n' %(inputFile,tag,pillarID,cropRowStart,cropColStart,cropRowEnd,cropColEnd,res_DNN,label))
+                    outFile_CNN.write('%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n' %(inputFile,tag,pillarID,cropRowStart,cropColStart,cropRowEnd,cropColEnd,res_CNN,label))
+                    outFile_VGG.write('%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n' %(inputFile,tag,pillarID,cropRowStart,cropColStart,cropRowEnd,cropColEnd,res_VGG,label))
+                    outFile_ALL.write('%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n' %(inputFile,tag,pillarID,cropRowStart,cropColStart,cropRowEnd,cropColEnd,res_ALL,label))
         cv2.imwrite(outputFile,gImgNorm)
     del df,inputFile,colTopLeft,rowTopLeft,colTopRight,rowTopRight,colBottomRight,rowBottomRight,colBottomLeft,rowBottomLeft,numPillarsInRow,numPillarsInCol,cropSize,outputFile,tag,gImg,gImgNorm,row,col,topRowPillarCentre,bottomRowPillarCenter
     gc.collect()
-    outFile.close()
+    outFile_DNN.close()
+    outFile_CNN.close()
+    outFile_VGG.close()
+    outFile_ALL.close()
 del excelFileName,sheetNameList,model_DNN,model_CNN,model_VGG,sheetName
 gc.collect()
 ############################################################
