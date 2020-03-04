@@ -27,15 +27,12 @@ def flipDataset(x,y):
     [rowDataset,colDataset] = x.shape
     row,col = int(numpy.sqrt(colDataset)),int(numpy.sqrt(colDataset))
     xFlipHor,yFlipHor = x.copy(),y.copy(); xFlipHor[:] = 0;
-    xFlipVer,yFlipVer = x.copy(),y.copy(); xFlipVer[:] = 0;
     for i in range(rowDataset):
         gImg = numpy.reshape(x[i,:],(row,col))
         gImgFlipHor = numpy.flip(gImg,axis=1)
-        gImgFlipVer = numpy.flip(gImg,axis=0)
         xFlipHor[i,:] = gImgFlipHor.flatten()
-        xFlipVer[i,:] = gImgFlipVer.flatten()
-    xFlip = numpy.row_stack((xFlipHor,xFlipVer))
-    yFlip = numpy.concatenate((yFlipHor,yFlipVer))
+    xFlip = xFlipHor.copy()
+    yFlip = yFlipHor.copy()
     return xFlip,yFlip
 ############################################################
 

@@ -35,7 +35,7 @@ def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,
         
     [rowDataset,colDataset] = xOriginal.shape
     if (shuffleFlag==True):
-        xOriginal,yOriginal = shuffle(xOriginal,yOriginal)
+        xOriginal,yOriginal = shuffle(xOriginal,yOriginal,random_state=1)
     xTrain,yTrain = xOriginal[:int(0.9*rowDataset),:],yOriginal[:int(0.9*rowDataset)]
     xTest,yTest = xOriginal[int(0.9*rowDataset):,:],yOriginal[int(0.9*rowDataset):]
     
@@ -56,8 +56,8 @@ def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,
     yTestInd = y2indicator(yTest,numClasses)
     
     if (shuffleFlag==True):
-        xTrain,yTrain,yTrainInd = shuffle(xTrain,yTrain,yTrainInd)
-        xTest,yTest,yTestInd = shuffle(xTest,yTest,yTestInd)
+        xTrain,yTrain,yTrainInd = shuffle(xTrain,yTrain,yTrainInd,random_state=1)
+        xTest,yTest,yTestInd = shuffle(xTest,yTest,yTestInd,random_state=1)
         
     return xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd
 ############################################################
