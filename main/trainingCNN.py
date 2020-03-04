@@ -15,8 +15,8 @@ import transform
 ############################################################
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
-xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=True,shuffleFlag=True)
-# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=True,shuffleFlag=True)
+# xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/newLabelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=True,shuffleFlag=True)
+xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=True,shuffleFlag=True)
 print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape,numpy.sum(yTrainInd,axis=0),numpy.sum(yTestInd,axis=0))
 
 # for i in range(10):
@@ -59,8 +59,8 @@ print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape,numpy.sum(yTrainI
 # RUN THE MODEL AND ON TEST AND TRAIN DATASET AND GENERATE
 # IMAGES FOR FALSE IDENTIFICATION
 ############################################################
-# trainImagesPath = '../dataset/incorrectClassifications/train'
-# testImagesPath = '../dataset/incorrectClassifications/test'
+trainImagesPath = '../dataset/incorrectClassifications/train'
+testImagesPath = '../dataset/incorrectClassifications/test'
 
 # modelPath = '../model/model_01_test_intermediate_086_intermediate_091_accuracy_trainAcc_99.42_testAcc_99.47.h5'
 # print ('Classification using %s' %(modelPath))
@@ -72,10 +72,10 @@ print (xTrain.shape,yTrainInd.shape,xTest.shape,yTestInd.shape,numpy.sum(yTrainI
 # utils.falseClassificationImage(modelPath,trainImagesPath,xTrain,yTrain)
 # utils.falseClassificationImage(modelPath,testImagesPath,xTest,yTest)
 
-# modelPath = '../model/vgg16_20200107_intermediate_003_intermediate_020_intermediate_030_intermediate_099_accuracy_trainAcc_99.93_testAcc_99.93.h5'
-# print ('Classification using %s' %(modelPath))
-# utils.falseClassificationImage(modelPath,trainImagesPath,xTrain,yTrain)
-# utils.falseClassificationImage(modelPath,testImagesPath,xTest,yTest)
+modelPath = '../model/vgg16_20200107_intermediate_003_intermediate_020_intermediate_030_intermediate_099_accuracy_trainAcc_99.93_testAcc_99.93.h5'
+print ('Classification using %s' %(modelPath))
+utils.falseClassificationImage(modelPath,trainImagesPath,xTrain,yTrain)
+utils.falseClassificationImage(modelPath,testImagesPath,xTest,yTest)
 ############################################################
 
 ############################################################
