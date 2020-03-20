@@ -18,7 +18,7 @@ import imageProcess
 # FIND OUT IF THE PILLAR IS COLLAPSED OR NOT COLLAPSED USING ML MODEL
 ############################################################
 excelFileName = 'classifyPillars.xlsx'
-sheetNameList = ['Original']#,'Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF','RestoreBy0.30%HF','RestoreBy0.10%HF']
+sheetNameList = ['Original','Plasma+RestoreByWater','RestoreByWater','RestoreBy1.00%HF','RestoreBy0.30%HF','RestoreBy0.10%HF']
 
 model_DNN = keras.models.load_model('../model/model_01_test_intermediate_086_intermediate_091_accuracy_trainAcc_99.42_testAcc_99.47.h5')
 model_CNN = keras.models.load_model('../model/model_02_20200106_intermediate_025_intermediate_007_accuracy_trainAcc_99.84_testAcc_99.83.h5')
