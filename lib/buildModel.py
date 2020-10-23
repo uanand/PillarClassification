@@ -177,6 +177,38 @@ def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
+    '''
+    Similar to the CNN model with 2 additional convolution layers. The
+    accuracy of this model was similar to CNN model.
+    The structure of the model is:
+    
+    CONV (32,5,5,SAME), RELU, CONV (32,5,5), RELU, MAXPOOL (2,2), DROPOUT (0.50)
+    CONV (64,5,5,SAME), RELU, CONV (64,5,5), RELU, MAXPOOL (2,2), DROPOUT (0.50)
+    DENSE (256), RELU, DROPOUT (0.50)
+    DENSE (128), RELU, DROPOUT (0.50)
+    DENSE (2), SOFTMAX
+    
+    The model parameters are saved after every epoch. After the last
+    epoch, the accuracy of all the intermediate models is tested and the
+    most accuracte model is retained. All other intermediate models are
+    removed.
+    
+    Input parameters:
+    name : (str) Name that the user assigns to the model. All the
+        intermediate and best models are saved with this prefix.
+    xTrain : training dataset stack represented as a 4D numpy array.
+        xTrain.shape yields [N, row, col, channel] where N is the number
+        of images in the training dataset, row and col correspond to the
+        size of the image, and channel is 1 for this model.
+    yTrain : 1D array of labels. 0 is collapsed, 1 is upright.
+    yTrainInd : 2D indicator array for the training dataset.
+    xTest : 4D test dataset.
+    yTest : 1D array of labels for the test dataset.
+    yTestInd: 2D indicator array for the test dataset.
+    epochs : (int) number of iterations for which the training needs to
+        be done.
+    batchSize : (int) number of images to use in every batch.
+    '''
     optimizer = optimizers.SGD(learning_rate=0.001,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
@@ -234,6 +266,38 @@ def model_03(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
+    '''
+    Similar to the CNN model with 3 convolution layers of different
+    size. The accuracy of this model was similar to CNN model.
+    The structure of the model is:
+    
+    CONV (32,3,3), BATCHNORMALIZATION, RELU, MAXPOOL (2,2), DROPOUT (0.50)
+    CONV (64,3,3), BATCHNORMALIZATION, RELU, MAXPOOL (2,2), DROPOUT (0.50)
+    CONV (128,3,3), BATCHNORMALIZATION, RELU, MAXPOOL (2,2), DROPOUT (0.50)
+    DENSE (512), RELU, DROPOUT (0.50)
+    DENSE (2), SOFTMAX
+    
+    The model parameters are saved after every epoch. After the last
+    epoch, the accuracy of all the intermediate models is tested and the
+    most accuracte model is retained. All other intermediate models are
+    removed.
+    
+    Input parameters:
+    name : (str) Name that the user assigns to the model. All the
+        intermediate and best models are saved with this prefix.
+    xTrain : training dataset stack represented as a 4D numpy array.
+        xTrain.shape yields [N, row, col, channel] where N is the number
+        of images in the training dataset, row and col correspond to the
+        size of the image, and channel is 1 for this model.
+    yTrain : 1D array of labels. 0 is collapsed, 1 is upright.
+    yTrainInd : 2D indicator array for the training dataset.
+    xTest : 4D test dataset.
+    yTest : 1D array of labels for the test dataset.
+    yTestInd: 2D indicator array for the test dataset.
+    epochs : (int) number of iterations for which the training needs to
+        be done.
+    batchSize : (int) number of images to use in every batch.
+    '''
     optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
@@ -284,17 +348,43 @@ def model_04(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 
 ############################################################
 # TRAINING DATA USING MODEL 5
-# CONV (32,3,3), RELU, SAME
-# CONV (32,3,3), RELU
-# MAXPOOL (2,2)
-# CONV (64,3,3), RELU, SAME
-# CONV (64,3,3), RELU
-# MAXPOOL (2,2)
-# DENSE (512), RELU
+# CONV (32,3,3), RELU, SAME, CONV (32,3,3), RELU, MAXPOOL (2,2), DROPOUT (0.50)
+# CONV (64,3,3), RELU, SAME, CONV (64,3,3), RELU, MAXPOOL (2,2), DROPOUT (0.50)
+# DENSE (512), RELU, DROPOUT (0.50)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
-    # optimizer = optimizers.RMSprop(learning_rate=0.001,decay=1e-6)
+    '''
+    4 convoluton layers with relu activation and dropout after every 2nd
+    layer. No batcnormalization performed. This model was had a
+    relatively low prediction accuracy. The structure of the model is:
+    
+    CONV (32,3,3), RELU, SAME, CONV (32,3,3), RELU, MAXPOOL (2,2), DROPOUT (0.50)
+    CONV (64,3,3), RELU, SAME, CONV (64,3,3), RELU, MAXPOOL (2,2), DROPOUT (0.50)
+    DENSE (512), RELU, DROPOUT (0.50)
+    DENSE (2), SOFTMAX
+    
+    The model parameters are saved after every epoch. After the last
+    epoch, the accuracy of all the intermediate models is tested and the
+    most accuracte model is retained. All other intermediate models are
+    removed.
+    
+    Input parameters:
+    name : (str) Name that the user assigns to the model. All the
+        intermediate and best models are saved with this prefix.
+    xTrain : training dataset stack represented as a 4D numpy array.
+        xTrain.shape yields [N, row, col, channel] where N is the number
+        of images in the training dataset, row and col correspond to the
+        size of the image, and channel is 1 for this model.
+    yTrain : 1D array of labels. 0 is collapsed, 1 is upright.
+    yTrainInd : 2D indicator array for the training dataset.
+    xTest : 4D test dataset.
+    yTest : 1D array of labels for the test dataset.
+    yTestInd: 2D indicator array for the test dataset.
+    epochs : (int) number of iterations for which the training needs to
+        be done.
+    batchSize : (int) number of images to use in every batch.
+    '''
     optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
@@ -342,8 +432,49 @@ def model_05(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 
 ############################################################
 # USE VGG TRAINING WEIGHTS FOR CLASSIFICATION
+# vgg16 = VGG16(input_shape=(row,col,channel),weights='imagenet',include_top=False)
+    # for layer in vgg16.layers:
+        # layer.trainable = False
+    # x = layers.Flatten()(vgg16.output)
+    # x = layers.Dense(100, activation='relu')(x)
+    # x = layers.Dense(2, activation='softmax')(x)
+    # model = keras.Model(inputs=vgg16.input, outputs=x)
 ############################################################
 def trainUsingVGG16(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
+    '''
+    VGG16 model with additional dense layers of size 100 and 2 at the
+    end. Imagenet weights wer used for the convolution section and
+    training was performed only on the final 2 dense layers. The
+    structure of the model is:
+    
+    x = layers.Flatten()(vgg16.output)
+    x = layers.Dense(100, activation='relu')(x)
+    x = layers.Dense(2, activation='softmax')(x)
+    model = keras.Model(inputs=vgg16.input, outputs=x)
+    
+    The model parameters are saved after every epoch. After the last
+    epoch, the accuracy of all the intermediate models is tested and the
+    most accuracte model is retained. All other intermediate models are
+    removed. The training and test datasets have 3 channels (RGB) and
+    the data renormalization is done by subtracting the mean intensity
+    value from each image.
+    
+    Input parameters:
+    name : (str) Name that the user assigns to the model. All the
+        intermediate and best models are saved with this prefix.
+    xTrain : training dataset stack represented as a 4D numpy array.
+        xTrain.shape yields [N, row, col, channel] where N is the number
+        of images in the training dataset, row and col correspond to the
+        size of the image, and channel is 1 for this model.
+    yTrain : 1D array of labels. 0 is collapsed, 1 is upright.
+    yTrainInd : 2D indicator array for the training dataset.
+    xTest : 4D test dataset.
+    yTest : 1D array of labels for the test dataset.
+    yTestInd: 2D indicator array for the test dataset.
+    epochs : (int) number of iterations for which the training needs to
+        be done.
+    batchSize : (int) number of images to use in every batch.
+    '''
     optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     xTrain,xTest = transform.renormalizeDataset(xTrain,xTest,VGG=True)
@@ -385,6 +516,32 @@ def trainUsingVGG16(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,bat
 # OPTIMIZATION PARAMETERS
 ############################################################
 def trainIntermediateModel(modelFile,name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,optimizer,epochs,batchSize,bestModelMode='history'):
+    '''
+    Train an existing model using different learning rate and optimizer.
+    
+    Input parameters:
+    modelFile : (str) name of the intermediate model that needs to be
+        trained again
+    name : (str) Name that the user assigns to the model. All the
+        intermediate and best models are saved with this prefix.
+    xTrain : training dataset stack represented as a 4D numpy array.
+        xTrain.shape yields [N, row, col, channel] where N is the number
+        of images in the training dataset, row and col correspond to the
+        size of the image, and channel is 1 for this model.
+    yTrain : 1D array of labels. 0 is collapsed, 1 is upright.
+    yTrainInd : 2D indicator array for the training dataset.
+    xTest : 4D test dataset.
+    yTest : 1D array of labels for the test dataset.
+    yTestInd: 2D indicator array for the test dataset.
+    epochs : (int) number of iterations for which the training needs to
+        be done.
+    batchSize : (int) number of images to use in every batch.
+    bestModelMode : method for selecting the best model. Available
+        options are 'history',and  'all'. On choosing 'history' the best
+        model is selected using the training history dictionary. If
+        'all' the best model is selected by testing the model accuracy
+        for the entire dataset - training + test data.
+    '''
     model = keras.models.load_model('../model/'+modelFile+'.h5')
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     callbacks_list = [keras.callbacks.ModelCheckpoint('../model/'+name+'_intermediate_{epoch:03d}.h5',monitor='val_accuracy',verbose=0,save_best_only=False,mode='auto',save_freq='epoch')]
