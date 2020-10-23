@@ -41,6 +41,9 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
     xTest : 4D test dataset.
     yTest : 1D array of labels for the test dataset.
     yTestInd: 2D indicator array for the test dataset.
+    epochs : (int) number of iterations for which the training needs to
+        be done.
+    batchSize : (int) number of images to use in every batch.
     '''
     optimizer = optimizers.SGD(learning_rate=0.0001,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
@@ -91,6 +94,36 @@ def model_01(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize)
 # DENSE (2), SOFTMAX
 ############################################################
 def model_02(name,xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd,epochs,batchSize):
+    '''
+    Referred to as the CNN model in the manuscript.
+    The structure of the model is:
+    
+    CONV (32,5,5,SAME), RELU, CONV (32,5,5), RELU, MAXPOOL (2,2), DROPOUT (0.50)
+    DENSE (256), RELU, DROPOUT (0.50)
+    DENSE (128), RELU, DROPOUT (0.50)
+    DENSE (2), SOFTMAX
+    
+    The model parameters are saved after every epoch. After the last
+    epoch, the accuracy of all the intermediate models is tested and the
+    most accuracte model is retained. All other intermediate models are
+    removed.
+    
+    Input parameters:
+    name : (str) Name that the user assigns to the model. All the
+        intermediate and best models are saved with this prefix.
+    xTrain : training dataset stack represented as a 4D numpy array.
+        xTrain.shape yields [N, row, col, channel] where N is the number
+        of images in the training dataset, row and col correspond to the
+        size of the image, and channel is 1 for this model.
+    yTrain : 1D array of labels. 0 is collapsed, 1 is upright.
+    yTrainInd : 2D indicator array for the training dataset.
+    xTest : 4D test dataset.
+    yTest : 1D array of labels for the test dataset.
+    yTestInd: 2D indicator array for the test dataset.
+    epochs : (int) number of iterations for which the training needs to
+        be done.
+    batchSize : (int) number of images to use in every batch.
+    '''
     optimizer = optimizers.SGD(learning_rate=0.01,momentum=0.99,nesterov=False)
     [N,row,col,channel] = xTrain.shape
     
