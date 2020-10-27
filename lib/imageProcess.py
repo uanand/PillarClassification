@@ -7,6 +7,22 @@ from skimage import measure
 # NORMALIZE AN 8 BIT GRAYSCALE IMAGE
 ############################################################
 def normalize(gImg, min=0, max=255):
+    '''
+    Linear contrast stretching.
+    
+    Input parameters:
+    gImg : (numpy array) Image numpy array.
+    min : (uint8) Minimum intensity value required for contrast adjusted
+        image. Default is 0.
+    min : (uint8) Maximum intensity value required for contrast adjusted
+        image. Default is 255.
+        
+    Returns:
+    gImg : (uint8 array) Contrast adjusted image. The minimum and
+        maximum intensity values in this image are min and max
+        respectively. All the intermediate intensity values are linearly
+        adjusted.
+    '''
     if (gImg.max() > gImg.min()):
         gImg = 1.0*(max-min)*(gImg - gImg.min())/(gImg.max() - gImg.min())
         gImg=gImg+min
