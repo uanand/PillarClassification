@@ -71,7 +71,7 @@ def flipDataset(x,y):
 ############################################################
 def resizeDataset(x,size):
     '''
-    Flip the dataset around the vertical central axis. 
+    Resize the dataset from AxA pixels to BxB pixels. 
     
     Input parameters:
     x : (2D array) With N rows and 1024 or 4096 columns. Each row
@@ -79,7 +79,7 @@ def resizeDataset(x,size):
     size : (tuple/list) Final desired size of each labelled image. Here,
         the labelled dataset was 64x64 pixels, and we resized it to
         32x32 pixels. size = [32,32], or size = (32,32).
-    
+        
     Returns:
     xResize : (2D array) Resized and flattened images with N rows. Each
         row corresponds to a flattened image.
@@ -98,6 +98,22 @@ def resizeDataset(x,size):
 # CONVERT THE DATASET TO RGB FORMAT
 ############################################################
 def convetToRGB(xTrain,xTest):
+    '''
+    Convert the training and test datasets from single channel grayscale
+    to 3 channel RGB.
+    
+    Input parameters:
+    xTrain : (4D array) Training dataset of shape [N,row,col,1]. Here N
+        is the number of images in the training dataset. 
+    xTest : (4D array) Test dataset of shape [N,row,col,1]. Here N
+        is the number of images in the test dataset.
+    
+    Returns:
+    xTrain : (4D array) Training dataset of shape [N,row,col,3],
+        corresponding to R, G, and B channels.
+    xTest : (4D array) Test dataset of shape [N,row,col,3],
+        corresponding to R, G, and B channels.
+    '''
     xTrainRGB = numpy.zeros([xTrain.shape[0],xTrain.shape[1],xTrain.shape[2],3])
     xTestRGB = numpy.zeros([xTest.shape[0],xTest.shape[1],xTest.shape[2],3])
     for i in range(xTrain.shape[0]):
@@ -117,6 +133,22 @@ def convetToRGB(xTrain,xTest):
 # RENORMALIZE DATASET TO DIFFERENT MODEL FORMATS
 ############################################################
 def renormalizeDataset(xTrain,xTest,VGG):
+    '''
+    Renormalize the training and test dataset as was done in the
+    original article. DOI - https://arxiv.org/abs/1409.1556v6
+    
+    Input parameters:
+    xTrain : (4D array) Training dataset of shape [N,row,col,1(3)]. Here
+        N is the number of images in the training dataset. 
+    xTest : (4D array) Test dataset of shape [N,row,col,1(3)]. Here N
+        is the number of images in the test dataset.
+    VGG : (bool) Flag to perform this renormalization.
+    
+    Returns:
+    xTrain : (4D array) Renormalized training dataset of shape
+        [N,row,col,3].
+    xTest : (4D array) Renormalized test dataset of shape [N,row,col,3].
+    '''
     if (VGG==True):
         try:
             [NTrain,rowTrain,colTrain,channelTrain] = xTrain.shape
@@ -157,6 +189,18 @@ def renormalizeDataset(xTrain,xTest,VGG):
 # NORMALIZE EACH IMAGE BETWEEN 0-255
 ############################################################
 def normalizeDataset(x):
+    '''
+    Stretch the contrast of each labelled dataset between 0 to 255.
+    
+    Input parameters:
+    x : (2D array) With N rows and 1024 or 4096 columns. Each row
+        corresponds to a flattened image.
+        
+    Returns:
+    x : (2D array) With N rows and 1024 or 4096 columns. Each row
+        corresponds to a flattened image. The intensity values of each
+        image are stretched between 0 to 255.
+    '''
     try:
         [rowDataset,colDataset] = x.shape
         for i in range(rowDataset):
