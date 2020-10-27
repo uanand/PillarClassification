@@ -41,7 +41,7 @@ def readDM4(fileName):
     
     Input parameters:
     fileName : (str) Complete file name with path of the DM3/DM4 file.
-        
+    
     Returns:
     gImg : (uint8 array) Contrast adjusted image. The minimum and
         maximum intensity values in this image are 0 and 255
@@ -68,7 +68,7 @@ def removeBoundaryParticles(bImg):
     
     Input parameters:
     bImg : (bool array) Boolean 2D array of binary image.
-        
+    
     Returns:
     bImg : (bool array) A new binary image where all the connected
         components touching the boundary have been removed. 
@@ -91,7 +91,7 @@ def convetToRGB(gImg):
     
     Input parameters:
     gImg : (2D array) Grayscale image.
-        
+    
     Returns:
     RGBImage : (3D array) RGB image with same values for the red, green,
         and blue channels. The shape of the array is [row, columns, 3]
@@ -115,7 +115,7 @@ def invert(gImg):
     
     Input parameters:
     gImg : (uint8 array) Grayscale or RGB input image.
-        
+    
     Returns:
     gImgIng : (uint8 array) Inverted image where the intensity of all
         the pixels have been inverted. 
@@ -173,6 +173,18 @@ def otsuThreshold(img):
 # KAPUR THRESHOLD FOR GRAYSCALE IMAGES
 ############################################################
 def threshold_kapur(gImg):
+    '''
+    Compute the Kapur's threshold (also call entropy-maximizing
+    threshold) for grayscale image. The algorithm is described here :
+    DOI - 10.1016/0734-189X(85)90125-2
+    
+    Input parameters:
+    gImg : (uint8 array) Grayscale input image.
+    
+    Returns:
+    threshold : (int) Intensity value at which the inter-class entropy
+        is maximized. 
+    '''
     gImg = gImg.flatten()
     freq, bin_edges = numpy.histogram(intensities,bins=range(0,256),normed=False)
     total_freq = numpy.sum(freq)
@@ -201,8 +213,21 @@ def threshold_kapur(gImg):
 # BINARY OPENING OPERATION
 ############################################################
 def binary_opening(bImg, iterations=1):
-    bImg = ndimage.binary_erosion(bImg, iterations=iterations)
-    bImg = ndimage.binary_dilation(bImg, iterations=iterations)
+    '''
+    Perform binary opening (erosion -> dilation) on a binary image.
+    
+    Input parameters:
+    bImg : (boolean array) Binary input image.
+    iterations : (int) Number of iterations for which binary opening
+        needs to performed. Default is 1 and the structuring element is
+        8-connected 3x3 array of ones.
+        
+    Returns:
+    bImg : (boolean array) Binary image after opening. 
+    '''
+    for i in range(iterations):
+        bImg = ndimage.binary_erosion(bImg)
+        bImg = ndimage.binary_dilation(bImg)
     return bImg
 ############################################################
 
