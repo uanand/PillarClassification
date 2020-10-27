@@ -62,6 +62,17 @@ def readDM4(fileName):
 # REMOVE BINARY WHITE PARTICLES TOUCHING THE BOUNDARY
 ############################################################
 def removeBoundaryParticles(bImg):
+    '''
+    Lable connected regions in a binary image and remove the labels at
+    the boundary.
+    
+    Input parameters:
+    bImg : (bool array) Boolean 2D array of binary image.
+        
+    Returns:
+    bImg : (bool array) A new binary image where all the connected
+        components touching the boundary have been removed. 
+    '''
     [row,col] = bImg.shape
     labelImg,numLabel = ndimage.label(bImg)
     boundaryLabels = numpy.unique(numpy.concatenate((numpy.unique(labelImg[:,0]),numpy.unique(labelImg[:,-1]),numpy.unique(labelImg[0,:]),numpy.unique(labelImg[-1,:]))))
