@@ -127,8 +127,19 @@ def invert(gImg):
 ############################################################
 # OTSU THRESHOLD FOR GRAYSCALE IMAGES
 ############################################################
-def otsuThreshold(img,bins=256,range=(0,255)):
-    hist,bins = numpy.histogram(img.flatten(),bins=bins,range=range)
+def otsuThreshold(img):
+    '''
+    Compute the Otsu's threshold for grayscale image. The algorithm is
+    described here : DOI - 10.1109/TSMC.1979.4310076
+    
+    Input parameters:
+    gImg : (uint8 array) Grayscale input image.
+    
+    Returns:
+    threshold : (int) Intensity value at which the inter-class variance
+        is minimized. 
+    '''
+    hist,bins = numpy.histogram(img.flatten(),bins=256,range=(0,255))
     totalPixels = hist.sum()
     
     currentMax = 0
