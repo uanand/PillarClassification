@@ -5,6 +5,15 @@ plt.style.use('UMM_ISO9001')
 # PLOT THE VALIDATION AND TEST LOSS AND ACCURACY FOR THE FITTED MODELS
 ############################################################
 def plotMetrics(fileName,history):
+    '''
+    Plot the loss and accuracy for trained models.
+    
+    Input parameters:
+    fileName : (str) Name that the user assigns to the model. All the
+        intermediate and best models are saved with this prefix.
+    history : (dict) Tensorflow/Keras history dictionary that saves the
+        training and test accuracy for all the intermediate models.
+    '''
     lossTrain,accuracyTrain = history.history['loss'],history.history['accuracy']
     lossTest,accuracyTest = history.history['val_loss'],history.history['val_accuracy']
     x = range(1,len(lossTrain)+1)
