@@ -235,6 +235,16 @@ def binary_opening(bImg, iterations=1):
 # FIND OUT THE BOUNDARY OF CONNECTED OBJECTS IN A BINARY IMAGE
 ############################################################
 def boundary(bImg):
+    '''
+    Find the boundary of connected components in a binary image.
+    
+    Input parameters:
+    bImg : (boolean array) Binary input image.
+    
+    Returns:
+    bImgBdry : (boolean array) Binary image with particle boundary
+        pixels marked as True. 
+    '''
     bImgErode = ndimage.binary_erosion(bImg)
     bImgBdry = (bImg.astype('uint8') - bImgErode.astype('uint8')).astype('bool')
     return bImgBdry
@@ -244,6 +254,26 @@ def boundary(bImg):
 # FIND OUT THE REGION PROPERTIES OF CONNECTED OBJECTS IN A BINARY IMAGE
 #######################################################################
 def regionProps(bImg,structure=[[1,1,1],[1,1,1],[1,1,1]]):
+    '''
+    Find region properties of different connected components in a binary
+    image. For each label the following are calculated -
+    1. bdryPixelList - the list of pixels that form the label boundary.
+    2. centroid - the centroid of the label in the (row,col) format.
+    3. aspectRatio - the ratio of major axis to the minor axis. A
+        value close to 1 means that the label is circular, and a higher
+        value means the label is elongated.
+    4. minDist - the minimum distance of the label from all other
+        labelled components.
+        
+    Input parameters:
+    bImg : (boolean array) Binary input image.
+    structure : (list) Connectivity structuring element to use for
+        labelling different components in the image.
+    
+    Returns:
+    dictionary : A python dictionary with all the propoerties of
+        different labels. 
+    '''
     [labelImg,numLabel] = ndimage.label(bImg,structure=structure)
     [row,col] = bImg.shape
     dictionary = {}
@@ -279,6 +309,19 @@ def regionProps(bImg,structure=[[1,1,1],[1,1,1],[1,1,1]]):
 # CALCULATE MINIMUM DISTANCE BETWEEN THE BOUNDARY OF TWO OBJECTS
 #######################################################################
 def calculateMinDistance(R1,C1,R2,C2):
+    '''
+    Calculate the minimum distance between two set of coordinates in the
+    (r,c) format.
+    
+    Input parameters:
+    r1 : (1D list/array) Row coordinates of all the points in object 1.
+    c1 : (1D list/array) Col coordinates of all the points in object 1.
+    r2 : (1D list/array) Row coordinates of all the points in object 2.
+    c2 : (1D list/array) Col coordinates of all the points in object 2.
+    
+    Returns:
+    minDist : (double) Minimum distance between two set of points. 
+    '''
     minDist = 1e10
     for r1,c1 in zip(R1,C1):
         for r2,c2 in zip(R2,C2):
