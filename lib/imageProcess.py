@@ -36,6 +36,18 @@ def normalize(gImg, min=0, max=255):
 # READ GATAN DM3 OR DM4 FILES
 ############################################################
 def readDM4(fileName):
+    '''
+    Load DM3/DM4 files in system memory as a uint8 2D image.
+    
+    Input parameters:
+    fileName : (str) Complete file name with path of the DM3/DM4 file.
+        
+    Returns:
+    gImg : (uint8 array) Contrast adjusted image. The minimum and
+        maximum intensity values in this image are 0 and 255
+        respectively. All the intermediate intensity values are linearly
+        adjusted.
+    '''
     f = hs.load(fileName);
     gImg = f.data
     lowLimit = f.original_metadata['DocumentObjectList']['TagGroup0']['ImageDisplayInfo']['LowLimit']
