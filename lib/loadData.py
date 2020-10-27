@@ -7,6 +7,18 @@ import transform
 # CONVERT Y TO AN INDICATOR MATRIX
 ############################################################
 def y2indicator(y,numClasses):
+    '''
+    Convert classification labelled array y to indicator matrix.
+    
+    Input parameters:
+    yTest : (1D array) Classification labels for N labelled images.
+    numClasses : (int) Number of classes in the labelled dataset. For
+        the nanopillar classification, it is 2.
+    
+    Returns:
+    yInd : (2D array) Indicator matrix for the labelled dataset.
+        Its shape is [N,numClasses].
+    '''
     N = y.size
     yInd = numpy.zeros([N,numClasses],dtype='float32')
     for i in range(N):
@@ -18,6 +30,45 @@ def y2indicator(y,numClasses):
 # LOAD THE LABELLED PILLAR DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
 def loadPillarData(fileName,numClasses,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False,shuffleFlag=True):
+    '''
+    Load the training and test dataset into system memory and perform
+    data augmentation based on user inputs.
+    
+    Input parameters:
+    fileName : (str) Name with full path of the file which has labelled
+        dataset. The first column corresponds to the label, and the
+        other columns correspond to the intensity value of each pixel of
+        64x64 images that are flattened usign numpy.flatten().
+    numClasses : (int) Number of classes in the labelled dataset. For
+        the nanopillar classification, it is 2. 
+    row : (int) Desired image size for training neural network model.
+    col : (int) Desired image size for training neural network model.
+    rotFlag : (bool) Use rotation (90, 180, 270 deg) for data
+        augmentation. Default is True.
+    flipFlag : (bool) use flipping around y axis for data aurgmentation.
+        Default is True.
+    RGB: (bool) Number of channels in training and test images. If true,
+        then each image will have 3 components. Turn on when using VGG16
+        model. Default is False.
+    shuffleFlag : (bool) Randomly shuffle the data before splitting into
+    training and test datasets. Default is True.
+    
+    Returns:
+    xTrain : (4D array) Normalized training dataset of shape
+        [N,row,col,1]. Usually the intensity values of each image are
+        normalized between 0 and 1.
+    yTrain : (1D array) Classification label for each training image.
+        The size of this array is N.
+    yTrainInd : (2D array) Indicator matrix for the training dataset.
+        Its shape is [N,numClasses].
+    xTest : (4D array) Normalized training dataset of shape
+        [N,row,col,1]. Usually the intensity values of each image are
+        normalized between 0 and 1.
+    yTest : (1D array) Classification label for each training image.
+        The size of this array is N.
+    yTestInd : (2D array) Indicator matrix for the training dataset.
+        Its shape is [N,numClasses].
+    '''
     labelledDataset = numpy.loadtxt(fileName,skiprows=1,dtype='uint8')
     [numLabelledDataset,temp] = labelledDataset.shape
     
