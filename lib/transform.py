@@ -8,6 +8,22 @@ import imageProcess
 # ROTATE THE TRAINING DATASET TO GENERATE MORE IMAGES FOR TRAINING
 ############################################################
 def rotateDataset(x,y,angle):
+    '''
+    Rotate the dataset by a certain angle for data augmentation. 
+    
+    Input parameters:
+    x : (2D array) With N rows and 1024 or 4096 columns. Each row
+        corresponds to a flattened image.
+    y : (1D array) Classification tags for N labelled images.
+    angle : (double) Rotation angle in degrees in counter-clockwise
+        direction.
+    
+    Returns:
+    xRot : (2D array) Rotated and flattened images with N rows and 1024
+        or 4096 columns. Each row corresponds to a flattened image.
+    yRot : (1D array) Classification tags for N rotated images. Same as
+        y.
+    '''
     [rowDataset,colDataset] = x.shape
     row,col = int(numpy.sqrt(colDataset)),int(numpy.sqrt(colDataset))
     xRot = x.copy(); xRot[:] = 0;
@@ -24,6 +40,20 @@ def rotateDataset(x,y,angle):
 # FLIP THE DATASET AROUND THE HORIZINTAL AND VERTICAL AXES
 ############################################################
 def flipDataset(x,y):
+    '''
+    Flip the dataset around the vertical central axis. 
+    
+    Input parameters:
+    x : (2D array) With N rows and 1024 or 4096 columns. Each row
+        corresponds to a flattened image.
+    y : (1D array) Classification tags for N labelled images.
+    
+    Returns:
+    xFlip : (2D array) Flipped and flattened images with N rows and 1024
+        or 4096 columns. Each row corresponds to a flattened image.
+    yRot : (1D array) Classification tags for N flipped images. Same as
+        y.
+    '''
     [rowDataset,colDataset] = x.shape
     row,col = int(numpy.sqrt(colDataset)),int(numpy.sqrt(colDataset))
     xFlipHor,yFlipHor = x.copy(),y.copy(); xFlipHor[:] = 0;
@@ -40,6 +70,20 @@ def flipDataset(x,y):
 # RESIZE THE TRAINING DATASET
 ############################################################
 def resizeDataset(x,size):
+    '''
+    Flip the dataset around the vertical central axis. 
+    
+    Input parameters:
+    x : (2D array) With N rows and 1024 or 4096 columns. Each row
+        corresponds to a flattened image.
+    size : (tuple/list) Final desired size of each labelled image. Here,
+        the labelled dataset was 64x64 pixels, and we resized it to
+        32x32 pixels. size = [32,32], or size = (32,32).
+    
+    Returns:
+    xResize : (2D array) Resized and flattened images with N rows. Each
+        row corresponds to a flattened image.
+    '''
     [rowDataset,colDataset] = x.shape
     row,col = int(numpy.sqrt(colDataset)),int(numpy.sqrt(colDataset))
     xResize = numpy.zeros([rowDataset,size[0]*size[1]],dtype='uint8')
