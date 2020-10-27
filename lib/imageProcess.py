@@ -86,6 +86,18 @@ def removeBoundaryParticles(bImg):
 # CONVERT THE IMAGE TO RGB FORMAT
 ############################################################
 def convetToRGB(gImg):
+    '''
+    Convert a grayscale 2D image to 3 channel RGB image.
+    
+    Input parameters:
+    gImg : (2D array) Grayscale image.
+        
+    Returns:
+    RGBImage : (3D array) RGB image with same values for the red, green,
+        and blue channels. The shape of the array is [row, columns, 3]
+        where 3 corresponds to RGB channels. First channel is red,
+        second blue, and third green.  
+    '''
     [row,col] = numpy.shape(gImg)
     gImgRGB = numpy.zeros([row,col,3],dtype=gImg.dtype)
     gImgRGB[:,:,0] = gImg
