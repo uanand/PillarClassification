@@ -110,6 +110,16 @@ def convetToRGB(gImg):
 # INVERT THE IMAGE
 ############################################################
 def invert(gImg):
+    '''
+    Inverse transformation of a uint8 grayscale/RGB image.
+    
+    Input parameters:
+    gImg : (uint8 array) Grayscale or RGB input image.
+        
+    Returns:
+    gImgIng : (uint8 array) Inverted image where the intensity of all
+        the pixels have been inverted. 
+    '''
     gImgInv = 255-gImg
     return gImgInv
 ############################################################
