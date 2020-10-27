@@ -33,6 +33,18 @@ def circle(img,center,radius,thickness=1,color=255):
 # WRITE CLASSIFICATION LABEL ALONGSIDE IMAGE
 ############################################################
 def labelNextToImage(gImg,label):
+    '''
+    Write classification label next to an input image.
+    
+    Input parameters:
+    gImg : (uint8 2D array) Image numpy array in grayscale
+    label : (str) The dsired label to write adjoining to the input
+        image label.
+        
+    Returns:
+    finalImg : (uint8 2D array) Image numpy array of dimension (row,
+        2*col) with image label written as text in the right half.
+    '''
     [row,col] = gImg.shape
     labelImg = numpy.zeros([row,col],dtype='uint8')
     position = (36,1) # row,col format
