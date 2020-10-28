@@ -10,6 +10,26 @@ sys.path.append(os.path.abspath('../lib'))
 import loadData
 import imageProcess
 
+'''
+Image processing method to classify nanopillars as collapsed or upright.
+The following process flow is used to classify nanopillars - 
+
+1. Load and invert the image. The pixels in the nanopillars appear
+    brighter and the background appears darker.
+2. Apply Otsu/Kapur/Mean threshold to binarize the image. After this,
+    the nanopillars are typically marked as Tru and the background as
+    False.
+3. Perform morphological operations to clean the binary image and label
+    the connected components.
+4. Identify the central object. Typically this the the nanopillar we
+    want to classify.
+5. Calculate the distance of the nearest connected component (NND) from
+    the central object.
+6. Calculate the aspect ratio (AR) of the central object.
+7. If AR > 1.5 or NND < 16, mark the nanopillar as collapsed.
+8. Mark the nnopillar as upright otherwise.
+'''
+
 ############################################################
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
@@ -34,12 +54,15 @@ for frame,x,y in tqdm(zip(range(yTrain.size),xTrain,yTrain)):
     gImg = imageProcess.invert(gImgNorm)
     
     # THRESHOLD METHOD 1 (OTSU)
-    # bImg = gImg >= imageProcess.otsuThreshold(gImg)
+    bImg = gImg >= imageProcess.otsuThreshold(gImg)
+    
+    # THRESHOLD METHOD 2 (KAPUR)
+    # bImg = gImg >= imageProcess.threshold_kapur(gImg)
     
     # THRESHOLD METHOD 2 (MEAN)
-    bImg = gImg >= numpy.mean(gImg)
-    bImg = imageProcess.binary_opening(bImg,iterations=4)
+    # bImg = gImg >= numpy.mean(gImg)
     
+    bImg = imageProcess.binary_opening(bImg,iterations=4)
     labelImg,numLabel,dictionary = imageProcess.regionProps(bImg)
     
     distanceFromCentre = 1e10
@@ -47,7 +70,7 @@ for frame,x,y in tqdm(zip(range(yTrain.size),xTrain,yTrain)):
         rCenter,cCenter = dictionary['centroid'][i]
         distance = numpy.sqrt((rCenter-row/2.0)**2 + (cCenter-col/2.0)**2)
         if (distance < distanceFromCentre):
-            distanceFromCentre =distance
+            distanceFromCentre = distance
             centerLabel = i+1
     nearestNeighborDistance = 1e10
     for i in range(numLabel):
