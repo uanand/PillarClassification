@@ -125,6 +125,18 @@ def selectBestModelHistory(modelFileList,history):
 # CONVERT Y TO AN INDICATOR MATRIX
 ############################################################
 def y2indicator(y,numClasses):
+    '''
+    Convert classification labelled array y to indicator matrix.
+    
+    Input parameters:
+    yTest : (1D array) Classification labels for N labelled images.
+    numClasses : (int) Number of classes in the labelled dataset. For
+        the nanopillar classification, it is 2.
+    
+    Returns:
+    yInd : (2D array) Indicator matrix for the labelled dataset.
+        Its shape is [N,numClasses].
+    '''
     N = y.size
     yInd = numpy.zeros([N,numClasses],dtype='float32')
     for i in range(N):
@@ -136,6 +148,21 @@ def y2indicator(y,numClasses):
 # READ THE HISTORY DICTIONARY SAVED AFTER MODEL RUN
 ############################################################
 def parseHistoryDict(inputFile):
+    '''
+    Read the Keras training history dictionary and extract the training
+    accuracy, test accuracy, training loss, and test loss for each epoch
+    as an array.
+    
+    Input parameters:
+    inputFile : (dict) Tensorflow/Keras history dictionary that saves
+        the training and test accuracy for all the intermediate models.
+    
+    Returns:
+    lossTrain : (1D array) Training loss for different epochs.
+    accuracyTrain : (1D array) Training accuracy for different epochs.
+    lossTest : (1D array) Test loss for different epochs.
+    accuracyTest : (1D array) Test loss for different epochs.
+    '''
     f = open(inputFile,'r')
     text = f.read()
     if ('accuracy' in text):
@@ -168,6 +195,19 @@ def parseHistoryDict(inputFile):
 # GENERATE IMAGES FOR FALSE DETECTION
 ############################################################
 def falseClassificationImage(modelPath,imagePath,X,Y):
+    '''
+    Generate the images with incorrect classification. Can be used to
+    check the manual labels and well as to understand the features of
+    images that are being incorectly classified. At the end, it also
+    prints the accuracy of the model after classifiying all the images.
+    
+    Input parameters:
+    modelPath : (str) Keras model with full path that you want to test.
+    imagePath : (str) The folder where incorrectly classified images
+        will be saved.
+    X : (4D array) Labelled dataset that you want to test the model on.
+    Y : (1D array) Labels assigned to all the datasets.
+    '''
     [N,row,col,channel] = X.shape
     counter = 0
     model = keras.models.load_model(modelPath)
