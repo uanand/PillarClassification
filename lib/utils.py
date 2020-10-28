@@ -238,6 +238,18 @@ def falseClassificationImage(modelPath,imagePath,X,Y):
 # GENERATE IMAGES FOR LABELLED DATASET
 ############################################################
 def imagesForLabelDataset(fileName,numClasses,dirList):
+    '''
+    Save the manually labelled nanopillars into two seprate folders - 
+    collapsed and notCollapsed. 
+    
+    Input parameters:
+    fileName : (str) Test file containing the labelled dataset.
+    numClasses : (int) Number of classes in the labelled dataset. In
+        this case it was 2.
+    dirList : (list of str) The list of directories where the nanopillar
+        image should be saved. In this case, the labelled images were
+        either saved in the collapsed or notCollapsed directory.
+    '''
     labelledDataset = numpy.loadtxt(fileName,skiprows=1)
     [numLabelledDataset,temp] = labelledDataset.shape
     x,y = labelledDataset[:,1:].astype('uint8'),labelledDataset[:,0].astype('uint8')
@@ -251,6 +263,14 @@ def imagesForLabelDataset(fileName,numClasses,dirList):
 # SAVE THE KERAS TRAINING DICTIONARY AS A TEXT FILE
 ############################################################
 def saveHistory(fileName,history):
+    '''
+    Save the TensorFlow/Keras history dictionary as a text file.
+    
+    Input parameters:
+    fileName : (str) File name with full path of the text file.
+    history : (dict) TensorFlow/Keras history dictionary that saves
+        the training and test accuracy for all the intermediate models.
+    '''
     f = open(fileName,'w')
     f.write(str(history.history))
     f.close()
@@ -260,6 +280,28 @@ def saveHistory(fileName,history):
 # TEST THE MODEL ACCURACY FOR TRAINING AND TEST DATASETS
 ############################################################
 def modelAccuracy(modelFile,xTrain,yTrainInd,xTest,yTestInd):
+    '''
+    Test the model accuracy for the entire labelled and augmented
+    dataset.
+    
+    Input parameters:
+    modelFile : (str) Name with full path of the model that has to be
+        tested.
+    xTrain : (4D array) Normalized training dataset of shape
+        [N,row,col,1(3)]. Usually the intensity values of each image are
+        normalized between 0 and 1.
+    yTrain : (1D array) Classification label for each training image.
+        The size of this array is N.
+    yTrainInd : (2D array) Indicator matrix for the training dataset.
+        Its shape is [N,numClasses].
+    xTest : (4D array) Normalized training dataset of shape
+        [N,row,col,1(3)]. Usually the intensity values of each image are
+        normalized between 0 and 1.
+    yTest : (1D array) Classification label for each training image.
+        The size of this array is N.
+    yTestInd : (2D array) Indicator matrix for the training dataset.
+        Its shape is [N,numClasses].
+    '''
     nTrain,nTest = xTrain.shape[0],xTest.shape[0]
     model = keras.models.load_model(modelFile)
     scoresTrain = model.evaluate(xTrain,yTrainInd,verbose=0)
