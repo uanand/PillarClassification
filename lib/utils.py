@@ -9,6 +9,34 @@ import transform
 # SELECT THE BEST MODEL BASED ON ACCURACY AND LOSS VALUES
 ############################################################
 def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
+    '''
+    Select the best model from all the intermediate saved model. Best
+    model is selected by checking the accuracy and loss for all the
+    training and test datasets. The best model is the one which has the
+    highest average accuracy and the lowest loss and is saved with the
+    test and training accuracy appened in the file name. The models
+    which have a lower accuracy and higher loss are deleted. Since the
+    classification is performed for all the datasets the process is
+    slow.
+    
+    Input parameters:
+    modelFileList : (list) Name with full path of the models that have
+        to be tested.
+    xTrain : (4D array) Normalized training dataset of shape
+        [N,row,col,1(3)]. Usually the intensity values of each image are
+        normalized between 0 and 1.
+    yTrain : (1D array) Classification label for each training image.
+        The size of this array is N.
+    yTrainInd : (2D array) Indicator matrix for the training dataset.
+        Its shape is [N,numClasses].
+    xTest : (4D array) Normalized training dataset of shape
+        [N,row,col,1(3)]. Usually the intensity values of each image are
+        normalized between 0 and 1.
+    yTest : (1D array) Classification label for each training image.
+        The size of this array is N.
+    yTestInd : (2D array) Indicator matrix for the training dataset.
+        Its shape is [N,numClasses].
+    '''
     bestAccuracyScore,bestLossScore = 0,1e10
     nTrain,nTest = xTrain.shape[0],xTest.shape[0]
     for modelFile in tqdm(modelFileList):
@@ -17,8 +45,6 @@ def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
         scoresTest = model.evaluate(xTest,yTestInd,verbose=0)
         scoreAccuracy = (scoresTrain[1]+scoresTest[1])/2.0
         scoreLoss = (scoresTrain[0]+scoresTest[0])/2.0
-        # scoreAccuracy = (scoresTrain[1]*nTrain+scoresTest[1]*nTest)/(nTrain+nTest)
-        # scoreLoss = (scoresTrain[0]*nTrain+scoresTest[0]*nTest)/(nTrain+nTest)
         diffAccuracy,diffLoss = numpy.abs(scoresTrain[1]-scoresTest[1]),numpy.abs(scoresTrain[0]-scoresTest[0])
         if (scoreAccuracy-diffAccuracy>bestAccuracyScore):
             bestAccuracyScore = scoreAccuracy-diffAccuracy
@@ -53,6 +79,19 @@ def selectBestModel(modelFileList,xTrain,yTrainInd,xTest,yTestInd):
 # THE HISTORY DICTIONARY
 ############################################################
 def selectBestModelHistory(modelFileList,history):
+    '''
+    Select the best model from all the intermediate saved modelbased on
+    the training and test history. The best model is the one which has
+    the highest average accuracy and the lowest loss and is saved with
+    the test and training accuracy appened in the file name. This best
+    model selection method is faster, albeit, less accurate.
+    
+    Input parameters:
+    modelFileList : (list) Name with full path of the models that have
+        to be tested.
+    history : (dict) Tensorflow/Keras history dictionary that saves the
+        training and test accuracy for all the intermediate models.
+    '''
     bestAccuracyScore,bestLossScore = 0,1e10
     lossTrainList,accuracyTrainList,lossTestList,accuracyTestList = parseHistoryDict(history)
     for modelFile,lossTrain,accuracyTrain,lossTest,accuracyTest in zip(modelFileList,lossTrainList,accuracyTrainList,lossTestList,accuracyTestList):
