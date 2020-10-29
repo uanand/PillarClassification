@@ -34,6 +34,7 @@ import utils
 import transform
 
 ############################################################
+# SECTION 1
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
 ############################################################
 xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName='../dataset/labelledDataset.dat',numClasses=2,row=32,col=32,rotFlag=True,flipFlag=True,RGB=False,shuffleFlag=True)
@@ -42,6 +43,7 @@ xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName=
 ############################################################
 
 ############################################################
+# SECTION 2
 # TRAIN YOUR MODEL. BUILD MODEL IN A SEPARATE FUNCTION FILE
 ############################################################
 # buildModel.model_01(name='model_01',xTrain=xTrain,yTrain=yTrain,yTrainInd=yTrainInd,xTest=xTest,yTest=yTest,yTestInd=yTestInd,epochs=200,batchSize=128)
@@ -54,6 +56,7 @@ xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName=
 
 
 ############################################################
+# SECTION 3
 # TRAIN SAVED MODEL WITH A DIFFERENT OPTIMIZATION PARAMTERS
 ############################################################
 # optimizer = optimizers.SGD(learning_rate=0.001,momentum=0.99,nesterov=False)
@@ -62,6 +65,7 @@ xTrain,yTrain,yTrainInd,xTest,yTest,yTestInd = loadData.loadPillarData(fileName=
 
 
 ############################################################
+# SECTION 4
 # RUN THE MODEL AND ON TEST AND TRAIN DATASET AND GENERATE
 # IMAGES FOR FALSE IDENTIFICATION
 ############################################################
@@ -88,6 +92,7 @@ testImagesPath = '../dataset/incorrectClassifications/test'
 ############################################################
 
 ############################################################
+# SECTION 5
 # TEST THE ACCURACY FOR EACH OF THE FINAL SELECTED MODELS
 ############################################################
 # utils.modelAccuracy('../model/model_01_test_intermediate_086_intermediate_091_accuracy_trainAcc_99.42_testAcc_99.47.h5',xTrain,yTrainInd,xTest,yTestInd)
