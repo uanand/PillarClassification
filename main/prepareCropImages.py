@@ -1,3 +1,10 @@
+'''
+Preparing cropped images for labelling. The raw DM3/DM4 files are
+entered as a list in an excel sheet ('prepareCropImages.xlsx') and small
+images centered around nanopillars are cropped and saved in a user
+defined output directory.
+'''
+
 import os
 import sys
 import numpy
