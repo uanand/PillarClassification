@@ -19,31 +19,30 @@ For training the labelled images were resized to 32x32 pixels. We trained three 
 ## Results
 1. DNN model
 
-|       N = 36296      | Prediction              |  
-|                      | Collapse   | Upright    |  
-|-----------|----------|------------|------------|  
-|   Actual  | Collapse | 17110      | 130        |  
-|   Actual  | Upright  | 83         | 18973      |  
+| DNN       |  (N      | =          | 36296)     |
+|-----------|----------|------------|------------|
+|           |          | Prediction | Prediction |
+|           |          | Collapse   | Upright    |
+| Actual    | Collapse | 17110      | 130        |
+| Actual    | Upright  | 83         | 18973      |
 
 2. CNN model
 
-| N = 36296 |          | Prediction | Prediction |
-|           |          | Collapse   | Upright    |
+| CNN       |  (N      | =          | 36296)     |
 |-----------|----------|------------|------------|
+|           |          | Prediction | Prediction |
+|           |          | Collapse   | Upright    |
 | Actual    | Collapse | 17195      | 45         |
 | Actual    | Upright  | 11         | 19045      |
 
 3. VGG16 model
 
-| N = 36296 |          | Prediction | Prediction |
-|           |          | Collapse   | Upright    |
+| VGG16     |  (N      | =          | 36296)     |
 |-----------|----------|------------|------------|
+|           |          | Prediction | Prediction |
+|           |          | Collapse   | Upright    |
 | Actual    | Collapse | 17225      | 15         |
 | Actual    | Upright  | 8          | 19048      |
 
 ## Comparison to image processing
-The image processing algorithm marks the pixels represented by nanopillars as 1 and the background as 0 to make a binary image. Then the aspect-ratio of the nanopillar, and its distance to the nearest nanopillar is calculated. If the aspect-ratio is more than 1.5 and the distance is more than 16 pixels, it is marked as a collased nanopillars.
-
-## Citing this work
-If you use these modules for your research work please cite the original paper as
-........
+The image processing algorithm marks the pixels represented by nanopillars as 1 and the background as 0 to make a binary image. Then the aspect-ratio of the nanopillar, and its distance to the nearest nanopillar is calculated. If the aspect-ratio is more than 1.5 and the distance is more than 16 pixels, it is marked as a collased nanopillars. The classification accuracy using this method was 98.4%. 
