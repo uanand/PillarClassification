@@ -12,19 +12,21 @@ After data augmentation the labelled dataset had 36296 images (17240 – collaps
 
 ## Model architectures
 For training the labelled images were resized to 32x32 pixels. We trained three different model architectures to classify nanopillars as collapsed or upright.
-1. A fully connected neural network (DNN) with four dense layers of size 512, 512, 256, and 2. The first 3 layers used ReLU activation, while the last layer used softmax activation.
-2. A convolution neural network (CNN) with 2 convolution layers of size 5x5, followed by half-maxpooling. Following this the feature map was flattened and connected to three dense layers of size 256, 128, and 2. The convolution layers, and the first two layers used ReLU activation, while the last layer used softmax activation.
+1. A fully connected neural network (_DNN_) with four dense layers of size 512, 512, 256, and 2. The first 3 layers used ReLU activation, while the last layer used softmax activation.
+2. A convolution neural network (_CNN_) with 2 convolution layers of size 5x5, followed by half-maxpooling. Following this the feature map was flattened and connected to three dense layers of size 256, 128, and 2. The convolution layers, and the first two layers used ReLU activation, while the last layer used softmax activation.
 3. Transfer learning using _VGG16_ model _imagenet_ weights. Two dense layers of size 100 and 2 with ReLU and softmax activation respectively were appended at the end of convolution and maxpooling layers of VGG16 model. The training was done only on the last two layers.
 
 ## Results
 1. DNN model
-| N = 36296 |          | Prediction | Prediction |
-|           |          | Collapse   | Upright    |
-|-----------|----------|------------|------------|
-| Actual    | Collapse | 17110      | 130        |
-| Actual    | Upright  | 83         | 18973      |
+
+|       N = 36296      | Prediction              |  
+|                      | Collapse   | Upright    |  
+|-----------|----------|------------|------------|  
+|   Actual  | Collapse | 17110      | 130        |  
+|   Actual  | Upright  | 83         | 18973      |  
 
 2. CNN model
+
 | N = 36296 |          | Prediction | Prediction |
 |           |          | Collapse   | Upright    |
 |-----------|----------|------------|------------|
@@ -32,6 +34,7 @@ For training the labelled images were resized to 32x32 pixels. We trained three 
 | Actual    | Upright  | 11         | 19045      |
 
 3. VGG16 model
+
 | N = 36296 |          | Prediction | Prediction |
 |           |          | Collapse   | Upright    |
 |-----------|----------|------------|------------|
