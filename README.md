@@ -45,4 +45,4 @@ For training the labelled images were resized to 32x32 pixels. We trained three 
 | Actual    | Upright  | 8          | 19048      |
 
 ## Comparison to image processing
-The image processing algorithm marks the pixels represented by nanopillars as 1 and the background as 0 to make a binary image. Then the aspect-ratio of the nanopillar, and its distance to the nearest nanopillar is calculated. If the aspect-ratio is more than 1.5 and the distance is more than 16 pixels, it is marked as a collased nanopillars. The classification accuracy using this method was 98.39%. 
+The image processing algorithm marks the pixels represented by nanopillars as 1 and the background as 0 to make a binary image. Then the aspect-ratio of the nanopillar, and its distance to the nearest nanopillar is calculated. If the aspect-ratio is more than 1.5 and the distance is more than 16 pixels, it is marked as a collapsed nanopillar. The classification accuracy using this method is 98.39%. 
