@@ -17,7 +17,7 @@ For training the labelled images were resized to 32x32 pixels. We trained three 
 3. Transfer learning using _VGG16_ model _imagenet_ weights. Two dense layers of size 100 and 2 with ReLU and softmax activation respectively were appended at the end of convolution and maxpooling layers of VGG16 model. The training was done only on the last two layers.
 
 ## Results
-1. DNN model
+1. DNN model - classification accuracy = 99.41%
 
 | DNN       |  (N      | =          | 36296)     |
 |-----------|----------|------------|------------|
@@ -26,7 +26,7 @@ For training the labelled images were resized to 32x32 pixels. We trained three 
 | Actual    | Collapse | 17110      | 130        |
 | Actual    | Upright  | 83         | 18973      |
 
-2. CNN model
+2. CNN model - classification accuracy = 99.84%
 
 | CNN       |  (N      | =          | 36296)     |
 |-----------|----------|------------|------------|
@@ -35,7 +35,7 @@ For training the labelled images were resized to 32x32 pixels. We trained three 
 | Actual    | Collapse | 17195      | 45         |
 | Actual    | Upright  | 11         | 19045      |
 
-3. VGG16 model
+3. VGG16 model - classification accuracy = 99.94%
 
 | VGG16     |  (N      | =          | 36296)     |
 |-----------|----------|------------|------------|
@@ -45,4 +45,4 @@ For training the labelled images were resized to 32x32 pixels. We trained three 
 | Actual    | Upright  | 8          | 19048      |
 
 ## Comparison to image processing
-The image processing algorithm marks the pixels represented by nanopillars as 1 and the background as 0 to make a binary image. Then the aspect-ratio of the nanopillar, and its distance to the nearest nanopillar is calculated. If the aspect-ratio is more than 1.5 and the distance is more than 16 pixels, it is marked as a collased nanopillars. The classification accuracy using this method was 98.4%. 
+The image processing algorithm marks the pixels represented by nanopillars as 1 and the background as 0 to make a binary image. Then the aspect-ratio of the nanopillar, and its distance to the nearest nanopillar is calculated. If the aspect-ratio is more than 1.5 and the distance is more than 16 pixels, it is marked as a collased nanopillars. The classification accuracy using this method was 98.39%. 
