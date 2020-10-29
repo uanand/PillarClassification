@@ -1,3 +1,20 @@
+'''
+Matplotlib based GUI for manual labelling of cropped nanopillar images
+as collapsed or upright. Required used inputs are -
+inputDir : (str) Directory where all the cropped images are saved.
+outputFile : (str) Text file which will contain the pixel values of each
+    nanopillar image and their corresponding label.
+classificationFile : (str) Text file which will contain the pixel values
+    of each nanopillar image and their corresponding label.
+firstFrame : (int) Corresponds to the number of images that need to be
+    labelled.
+lastFrame : (int)  Corresponds to the number of images that need to be
+    labelled.
+zFillVal : (int) Default is 6. Number of zeros to prepend for image file
+    name.
+method : 'makeNewDataset'. Use default option for now.
+'''
+
 import os
 import sys
 import numpy
@@ -12,7 +29,7 @@ outputFile = '../dataset/labelledDataset.dat'
 classificationFile = '../dataset/classifiedDataset.dat'
 firstFrame,lastFrame = 1,4537
 zfillVal = 6
-method = 'useClassificationResult'#'makeNewDataset'
+method = 'makeNewDataset'#'useClassificationResult','makeNewDataset'
 # frameList = range(firstFrame,lastFrame+1)
 # numFrames=len(frameList)
 

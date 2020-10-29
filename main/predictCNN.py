@@ -1,13 +1,3 @@
-import os
-import sys
-import cv2
-import numpy
-from tqdm import tqdm
-from keras.models import load_model
-
-sys.path.append(os.path.abspath('../lib'))
-import imageDraw
-
 '''
 Manual labelling of dataset is one of the most time consuming part for
 machine learning algorithms. We labelled 500 nanopillars as collapsed or
@@ -17,6 +7,16 @@ This code generates labelled nanopillars and the ones that are
 incorrectly classified were fixed manually to increase the size of
 training dataset.
 '''
+
+import os
+import sys
+import cv2
+import numpy
+from tqdm import tqdm
+from keras.models import load_model
+
+sys.path.append(os.path.abspath('../lib'))
+import imageDraw
 
 inputDir = '../dataset/allImages'
 outputDir = '../dataset/classifiedImages'

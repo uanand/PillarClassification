@@ -1,15 +1,3 @@
-import os
-import sys
-import numpy
-import cv2
-import matplotlib.pyplot as plt
-from tqdm import tqdm
-from scipy import ndimage
-
-sys.path.append(os.path.abspath('../lib'))
-import loadData
-import imageProcess
-
 '''
 Image processing method to classify nanopillars as collapsed or upright.
 The following process flow is used to classify nanopillars - 
@@ -29,6 +17,18 @@ The following process flow is used to classify nanopillars -
 7. If AR > 1.5 or NND < 16, mark the nanopillar as collapsed.
 8. Mark the nnopillar as upright otherwise.
 '''
+
+import os
+import sys
+import numpy
+import cv2
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from scipy import ndimage
+
+sys.path.append(os.path.abspath('../lib'))
+import loadData
+import imageProcess
 
 ############################################################
 # LOAD THE LABELLED DATASET AND SPLIT INTO TRAINING AND TEST
