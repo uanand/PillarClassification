@@ -110,8 +110,6 @@ venv.bak/
 *.odp
 datasetForTraining/
 dataset/labelledDataset_firstTraining.dat
-model/
-dataset/
 main/mprofile*
 notebooks/*.dat
 oldModel/
