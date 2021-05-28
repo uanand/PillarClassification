@@ -46,3 +46,7 @@ For training the labelled images were resized to 32x32 pixels. We trained three 
 
 ## Comparison to image processing
 The image processing algorithm marks the pixels represented by nanopillars as 1 and the background as 0 to make a binary image. Then the aspect-ratio of the nanopillar, and its distance to the nearest nanopillar is calculated. If the aspect-ratio is more than 1.5 and the distance is more than 16 pixels, it is marked as a collapsed nanopillar. The classification accuracy using this method is 98.39%. 
+
+## Citing this article
+The article is published in ACS Applied Nano Materials.
+Utkarsh Anand, Tanmay Ghosh, Zainul Aabdin, Nandi Vrancken, Hongwei Yan, XiuMei Xu, Frank Holsteyns, and Utkur Mirsaidov, "*Deep Learning-Based High Throughput Inspection in 3D Nanofabrication and Defect Reversal in Nanopillar Arrays: Implications for Next Generation Transistors*". ACS Appl. Nano Mater. 2021, 4, 3, 2664–2672. DOI: [https://doi.org/10.1021/acsanm.0c03283](https://doi.org/10.1021/acsanm.0c03283).
